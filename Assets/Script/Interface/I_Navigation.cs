@@ -4,9 +4,9 @@ using UnityEngine;
 
 public interface I_Navigation
 {
-    public void OnFocused();
-    public void OnDefocused();
-    public void OnTap();
-    public void OnHold();
-    public void OnCancelledHold();
+    public void State_Focused();
+    public void State_Defocused();
+    public void State_Tap();
+    public void State_Hold();
+    public void State_CancelledHold();
 }
