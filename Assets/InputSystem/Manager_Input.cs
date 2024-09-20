@@ -5,9 +5,10 @@ using System;
 
 public class Manager_Input : MonoBehaviour
 {
+    public enum PressedState { Tap, Hold, HoldCancel};
     private Input_PlayerOne playerOne_Input;
     public static event Action<float> Event_Navigation;
-
+    public static event Action<PressedState> Event_Interract;
     private void Awake()
     {
         playerOne_Input = new Input_PlayerOne();
@@ -44,6 +45,7 @@ public class Manager_Input : MonoBehaviour
         if(interraction.interaction is HoldInteraction)
         {
             Debug.Log("<color=green><b>Gameplay</b></color>\t: Cancelled Hold Interraction");
+            Event_Interract?.Invoke(PressedState.HoldCancel);
         }
     }
 
@@ -53,9 +55,11 @@ public class Manager_Input : MonoBehaviour
         {
             case TapInteraction:
                 Debug.Log("<color=green><b>Gameplay</b></color>\t: Performed Tap Interraction");
+                Event_Interract?.Invoke(PressedState.Tap);
                 break;
             case HoldInteraction:
                 Debug.Log("<color=green><b>Gameplay</b></color>\t: Performed Hold Interraction");
+                Event_Interract?.Invoke(PressedState.Hold);
                 break;
         }
     }
@@ -87,6 +91,7 @@ public class Manager_Input : MonoBehaviour
     private void UI_Navigation_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
         float read_value = playerOne_Input.UI.Navigation.ReadValue<float>();
+        Event_Navigation?.Invoke(read_value);
         Debug.Log($"<color=orange><b>UI</b></color>\t: Performed Navigation => <b>{read_value}</b>");
     }
     #endregion
