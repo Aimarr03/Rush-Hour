@@ -17,6 +17,10 @@ namespace GameplayManager
         private void Awake()
         {
             trafficLights = FindObjectsOfType<Gameplay_TrafficLight>();
+            foreach(Gameplay_TrafficLight trafficLight in trafficLights)
+            {
+                trafficLight.State_Defocused();
+            }
         }
         private void Start()
         {

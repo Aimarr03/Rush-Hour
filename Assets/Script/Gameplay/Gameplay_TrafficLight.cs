@@ -11,8 +11,8 @@ public class Gameplay_TrafficLight : MonoBehaviour, I_Navigation
     private float maxBufferDuration = 0;
     private float intervalSwitch = 0.5f;
     private float intervalHold = 1.5f;
-    
-    
+
+    [SerializeField] private SpriteRenderer visualIndicator;
     public enum TrafficState
     {
         Idle,
@@ -32,12 +32,12 @@ public class Gameplay_TrafficLight : MonoBehaviour, I_Navigation
 
     public void State_Defocused()
     {
-
+        visualIndicator.gameObject.SetActive(false);
     }
 
     public void State_Focused()
     {
-        
+        visualIndicator.gameObject.SetActive(true);
     }
 
     public void State_Hold()
