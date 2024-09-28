@@ -2,6 +2,7 @@ using UnityEngine;
 using InputManager;
 using UnityEngine.InputSystem.Interactions;
 using System;
+using GameplayManager;
 
 public class Manager_Input : MonoBehaviour
 {
