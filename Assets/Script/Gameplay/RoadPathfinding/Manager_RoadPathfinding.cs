@@ -12,20 +12,67 @@ public class Manager_RoadPathfinding : MonoBehaviour
 
     public List<Gameplay_RoadNode> OpenList;
     public List<Gameplay_RoadNode> CloseList;
+
+    public List<Gameplay_RoadNode> EdgeTilesList;
+
     private Dictionary<Vector3Int, Gameplay_RoadNode> allTiles;
     private List<Gameplay_RoadNode> currentPath;
-    [SerializeField] private Vector3 testStartPos = new Vector3(7.63f, 2.54f, 0);
-    [SerializeField] private Vector3 testEndPos = new Vector3(-8.10f, 2.92f, 0);
+
+    
 
     private Gameplay_RoadNode startNode, endNode;
+
+    public static Manager_RoadPathfinding instance;
+
+    private void Awake()
+    {
+        
+    }
+    void Start()
+    {
+        Initialized();
+        //currentPath = SetPathFromWorldPosition(testStartPos, testEndPos);
+    }
+    private void Update()
+    {
+        /*currentDuration += Time.deltaTime;
+        if (currentDuration > 1)
+        {
+            currentDuration = 0;
+            currentPath = SetPathFromWorldPosition(startPos.position, endPos.position);
+        }*/
+
+    }
+    private void OnDrawGizmos()
+    {
+        if (currentPath != null)
+        {
+            Gizmos.color = Color.red;
+            for (int index = 0; index < currentPath.Count - 1; index++)
+            {
+                Gameplay_RoadNode currentNode = currentPath[index];
+                Gameplay_RoadNode nextNode = currentPath[index + 1];
+                if (nextNode == null) break;
+                Gizmos.DrawLine(currentNode.worldPosition, nextNode.worldPosition);
+            }
+        }
+    }
+    #region Initializing
     public void Initialized()
     {
         OpenList = new List<Gameplay_RoadNode>();
-        CloseList = new List<Gameplay_RoadNode>();    
+        CloseList = new List<Gameplay_RoadNode>();
         allTiles = new Dictionary<Vector3Int, Gameplay_RoadNode>();
+        EdgeTilesList = new List<Gameplay_RoadNode>();
+
         /*Debug.Log(tilemap.cellBounds);
         Debug.Log(tilemap.cellBounds.allPositionsWithin);*/
+
         BoundsInt boundaryTilemap = tilemap.cellBounds;
+        Debug.Log($"XMin = {boundaryTilemap.xMin}");
+        Debug.Log($"XMax= {boundaryTilemap.xMax}");
+        Debug.Log($"YMin = {boundaryTilemap.yMin}");
+        Debug.Log($"YMax= {boundaryTilemap.yMax}");
         for (int X_Index = boundaryTilemap.xMin; X_Index < boundaryTilemap.xMax; X_Index++)
         {
             for (int Y_Index = boundaryTilemap.yMin; Y_Index < boundaryTilemap.yMax; Y_Index++)
@@ -40,9 +87,35 @@ public class Manager_RoadPathfinding : MonoBehaviour
         }
         foreach (Gameplay_RoadNode currentTile in allTiles.Values)
         {
-            Debug.Log("Current Tile in " + currentTile.gridPosition);
+            if (IsEdgeNode(currentTile.gridPosition))
+            {
+                EdgeTilesList.Add(currentTile);
+                Debug.Log(currentTile.gridPosition + " is a edge tile");
+            }
         }
     }
+    private bool IsEdgeNode(Vector3Int Pos)
+    {
+        int currentConnection = 0;
+        for(int dx = -1; dx <= 1; dx++)
+        {
+            if (dx == 0) continue;
+            Vector3Int neighborPos = Pos + new Vector3Int(dx, 0);
+            if (allTiles.ContainsKey(neighborPos)) currentConnection++;
+            if (currentConnection >= 2) return false;
+        }
+        for (int dy = -1; dy <= 1; dy++)
+        {
+            if (dy == 0) continue;
+            Vector3Int neighborPos = Pos + new Vector3Int(0, dy);
+            if (allTiles.ContainsKey(neighborPos)) currentConnection++;
+            if (currentConnection >= 2) return false;
+        }
+        return currentConnection == 1;
+    }
+    #endregion
+    #region PathFinding Algorithm
+
     public List<Gameplay_RoadNode> SetPathFromWorldPosition(Vector3 startWorldPos, Vector3 endWorldPos)
     {
         Vector3Int startPos = tilemap.WorldToCell(startWorldPos);
@@ -144,36 +217,8 @@ public class Manager_RoadPathfinding : MonoBehaviour
             //Debug.Log(currentNode.gridPosition);
         }
         path.Reverse();
-        Debug.Log("Path Found");
+        //Debug.Log("Path Found");
         return path;
     }
-    void Start()
-    {
-        Initialized();
-        //currentPath = SetPathFromWorldPosition(testStartPos, testEndPos);
-    }
-    private void Update()
-    {
-        currentDuration += Time.deltaTime;
-        if(currentDuration > 1)
-        {
-            currentDuration = 0;
-             currentPath = SetPathFromWorldPosition(startPos.position, endPos.position);
-        }
-
-    }
-    private void OnDrawGizmos()
-    {
-        if (currentPath != null)
-        {
-            Gizmos.color = Color.red;
-            for (int index = 0; index < currentPath.Count - 1; index++)
-            {
-                Gameplay_RoadNode currentNode = currentPath[index];
-                Gameplay_RoadNode nextNode = currentPath[index + 1];
-                if (nextNode == null) break;
-                Gizmos.DrawLine(currentNode.worldPosition, nextNode.worldPosition);
-            }
-        }
-    }
+    #endregion
 }
