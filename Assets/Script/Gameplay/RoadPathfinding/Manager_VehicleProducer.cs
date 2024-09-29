@@ -1,6 +1,7 @@
 using Gameplay_RoadLogic;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 namespace GameplayManager
@@ -13,6 +14,7 @@ namespace GameplayManager
 
         private float currentDuration;
         private float currentIntervalToSpawn;
+        private float intervalSpawnVehicle = 0.25f;
         
         private float minDuration = 0.5f;
         private float maxDuration = 1.2f;
@@ -46,12 +48,20 @@ namespace GameplayManager
             {
                 endNode = List_EdgeNodes[Random.Range(0, List_EdgeNodes.Count)];
             } while (startNode == endNode);
-
-            List<Gameplay_RoadNode> destinations = roadPathfinding.SetPathFromWorldPosition(startNode.worldPosition, endNode.worldPosition);
-            Gameplay_VehicleBasic newCar = Instantiate(basicCar);
-            newCar.transform.position = startNode.worldPosition;
-            newCar.SetUpDestination(destinations);
-
+            int range = Random.Range(3, 6);
+            StartCoroutine(SpawnVehicleWithCount(startNode.worldPosition, endNode.worldPosition, range));
+        }
+        private IEnumerator SpawnVehicleWithCount(Vector3 startPos, Vector3 endPos, int maxCount)
+        {
+            List<Gameplay_RoadNode> destinations = roadPathfinding.SetPathFromWorldPosition(startPos, endPos);
+            for (int index = 0; index < maxCount; index++)
+            {
+                Gameplay_VehicleBasic newCar = Instantiate(basicCar);
+                newCar.transform.position = startPos;
+                newCar.SetUpDestination(destinations, 3.5f);
+                yield return new WaitForSeconds(intervalSpawnVehicle);
+            }
+            yield return null;
         }
     }
 }

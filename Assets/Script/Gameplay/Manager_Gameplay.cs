@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Gameplay_RoadLogic;
+using System.Linq;
 
 namespace GameplayManager
 {
@@ -10,18 +11,25 @@ namespace GameplayManager
         private Manager_Game.GameState state => Manager_Game.GameState.Gameplay;
         private bool canBeInterracted;
         
-        private Gameplay_TrafficLight[] trafficLights;
+        private List<Gameplay_TrafficLight>trafficLights;
         private Gameplay_TrafficLight currentTrafficLight;
         private int index = 0;
-        private int maxIndex => trafficLights.Length;
+        private int maxIndex => trafficLights.Count;
         
         private void Awake()
         {
-            trafficLights = FindObjectsOfType<Gameplay_TrafficLight>();
+            trafficLights = FindObjectsOfType<Gameplay_TrafficLight>().ToList();
             foreach(Gameplay_TrafficLight trafficLight in trafficLights)
             {
                 trafficLight.State_Defocused();
             }
+            SortTrafficLights();
+        }
+        private void SortTrafficLights()
+        {
+            trafficLights = trafficLights.OrderBy(light => light.transform.position.x)
+                                         .ThenBy(light => light.transform.position.y)
+                                         .ToList();
         }
         private void Start()
         {

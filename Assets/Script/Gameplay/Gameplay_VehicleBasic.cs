@@ -26,11 +26,11 @@ namespace Gameplay_RoadLogic
         {
             
         }
-        public void SetUpDestination(List<Gameplay_RoadNode> destinations)
+        public void SetUpDestination(List<Gameplay_RoadNode> destinations, float speed)
         {
             this.destinations.Clear();
             this.destinations = new Queue<Gameplay_RoadNode>(destinations);
-            movementSpeed = Random.Range(4f, 12f);
+            movementSpeed = speed;
 
             Debug.Log(destinations.Count);
             targetPosition = this.destinations.Dequeue().worldPosition;
