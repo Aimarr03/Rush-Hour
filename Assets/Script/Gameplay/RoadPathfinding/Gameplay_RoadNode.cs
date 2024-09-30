@@ -21,11 +21,24 @@ namespace Gameplay_RoadLogic
         public Gameplay_RoadNode previousNode;
 
         public bool walkable;
+        
+        
+        public List<Gameplay_RoadNode> AdjacentConnectedNodes;
+        public Enum_RoadNode_Type roadType;
+        public int connectedNodeCount = 0;
 
         public Gameplay_RoadNode(Vector3Int gridPosition, bool walkable)
         {
             this.gridPosition = gridPosition;
             this.walkable = walkable;
+            AdjacentConnectedNodes = new List<Gameplay_RoadNode>();
         }
+    }
+    public enum Enum_RoadNode_Type
+    {
+        Edge,
+        Straight,
+        Tri,
+        Cross
     }
 }

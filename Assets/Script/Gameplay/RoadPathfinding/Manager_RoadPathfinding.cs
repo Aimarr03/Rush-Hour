@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using static UnityEditor.PlayerSettings;
 
 
 namespace Gameplay_RoadLogic
@@ -90,14 +91,10 @@ namespace Gameplay_RoadLogic
             }
             foreach (Gameplay_RoadNode currentTile in allTiles.Values)
             {
-                if (IsEdgeNode(currentTile.gridPosition))
-                {
-                    EdgeTilesList.Add(currentTile);
-                    Debug.Log(currentTile.gridPosition + " is a edge tile");
-                }
+                SetTypeForNode(currentTile);
             }
         }
-        private bool IsEdgeNode(Vector3Int Pos)
+        /*private bool IsEdgeNode(Vector3Int Pos)
         {
             int currentConnection = 0;
             for (int dx = -1; dx <= 1; dx++)
@@ -115,6 +112,52 @@ namespace Gameplay_RoadLogic
                 if (currentConnection >= 2) return false;
             }
             return currentConnection == 1;
+        }
+        private void FindEdges(Gameplay_RoadNode firstNode)
+        {
+
+        }*/
+        private void SetTypeForNode(Gameplay_RoadNode node)
+        {
+            Vector3Int currentGridPos = node.gridPosition;
+            int connectedNode = 0;
+            for(int dx = -1; dx <= 1; dx ++)
+            {
+                if (dx == 0) continue;
+                Vector3Int neighborPos = currentGridPos + new Vector3Int(dx, 0);
+                if (allTiles.TryGetValue(neighborPos, out Gameplay_RoadNode neighborNode))
+                {
+                    connectedNode++;
+                    node.AdjacentConnectedNodes.Add(neighborNode);
+                }
+            }
+            for (int dy = -1; dy <= 1; dy ++)
+            {
+                if(dy == 0) continue;
+                Vector3Int neighborPos = currentGridPos + new Vector3Int(0, dy);
+                if (allTiles.TryGetValue(neighborPos, out Gameplay_RoadNode neighborNode))
+                {
+                    connectedNode++;
+                    node.AdjacentConnectedNodes.Add(neighborNode);
+                }
+            }
+            switch (connectedNode)
+            {
+                case 1: 
+                    node.roadType = Enum_RoadNode_Type.Edge;
+                    break;
+                case 2:
+                    node.roadType = Enum_RoadNode_Type.Straight;
+                    break;
+                case 3:
+                    node.roadType = Enum_RoadNode_Type.Tri;
+                    break;
+                case 4:
+                    node.roadType = Enum_RoadNode_Type.Cross;
+                    break;
+            }
+            node.connectedNodeCount = connectedNode;
+            Debug.Log($"Node For Grid Pos {node.gridPosition} World Pos {node.worldPosition} is a {node.roadType} with {connectedNode} connected nodes");
         }
         #endregion
         #region PathFinding Algorithm
