@@ -29,7 +29,7 @@ namespace GameplayManager
         {
 
         }
-        /*private void Update()
+        private void Update()
         {
             currentDuration += Time.deltaTime;
             if (currentDuration > currentIntervalToSpawn)
@@ -38,7 +38,7 @@ namespace GameplayManager
                 currentIntervalToSpawn = intervalToSpawn;
                 SpawnVehicle();
             }
-        }*/
+        }
 
         private void SpawnVehicle()
         {

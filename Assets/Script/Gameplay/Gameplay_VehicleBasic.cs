@@ -32,7 +32,7 @@ namespace Gameplay_RoadLogic
             this.destinations = new Queue<Gameplay_RoadNode>(destinations);
             movementSpeed = speed;
 
-            Debug.Log(destinations.Count);
+            //Debug.Log(destinations.Count);
             targetPosition = this.destinations.Dequeue().worldPosition;
             currentState = VehicleState.Move;
         }
@@ -48,6 +48,12 @@ namespace Gameplay_RoadLogic
             }
         }
         #endregion
+        #region StateLogic
+        public void SetState(VehicleState state)
+        {
+            currentState = state;
+        }
+        #endregion
         #region MoveLogic
         private void HandleMovementLogic()
         {
@@ -60,7 +66,7 @@ namespace Gameplay_RoadLogic
                 if(destinations.Count > 0)
                 {
                     targetPosition = destinations.Dequeue().worldPosition;
-                    Debug.Log("Change Destinations");
+                    //Debug.Log("Change Destinations");
                 }
                 else
                 {

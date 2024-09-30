@@ -15,7 +15,12 @@ namespace Gameplay_RoadLogic
         private float intervalSwitch = 0.5f;
         private float intervalHold = 1.5f;
 
+        [SerializeField] private Collider2D AreaDetection;
+
         [SerializeField] private SpriteRenderer visualIndicator;
+        [SerializeField] private Transform StopPosition;
+
+        private List<Gameplay_VehicleBasic> ListVehicle;
         public enum TrafficState
         {
             Idle,
@@ -30,48 +35,10 @@ namespace Gameplay_RoadLogic
             Green
         }
 
-
-
-
-        public void State_Defocused()
-        {
-            visualIndicator.gameObject.SetActive(false);
-        }
-
-        public void State_Focused()
-        {
-            visualIndicator.gameObject.SetActive(true);
-        }
-
-        public void State_Hold()
-        {
-            if (Current_TrafficState != TrafficState.Idle) return;
-            Debug.Log($"<b>{gameObject.name}</b>\t: Set to Hold State");
-            Current_TrafficState = TrafficState.Hold;
-            currentDuration = 0;
-            maxBufferDuration = intervalSwitch;
-        }
-        public void State_CancelledHold()
-        {
-            if (Current_TrafficState != TrafficState.Hold) return;
-            Debug.Log($"<b>{gameObject.name}</b>\t: Set to Transition Exit State From Hold State");
-            Current_TrafficState = TrafficState.OnTransitionExit;
-            currentDuration = 0;
-        }
-        public void State_Tap()
-        {
-            if (Current_TrafficState != TrafficState.Idle) return;
-            Debug.Log($"<b>{gameObject.name}</b>\t: Set to Tap State");
-            Current_TrafficState = TrafficState.Tap;
-            currentDuration = 0;
-            maxBufferDuration = intervalSwitch;
-        }
-
-
-
         private void Awake()
         {
             Current_TrafficState = TrafficState.Idle;
+            ListVehicle = new List<Gameplay_VehicleBasic>();
             Current_LightState = LightState.Red;
         }
 
@@ -92,6 +59,23 @@ namespace Gameplay_RoadLogic
                     break;
             }
         }
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            Debug.Log("Enter Vehicle");
+            if(collision.TryGetComponent(out Gameplay_VehicleBasic vehicleBasic))
+            {
+                vehicleBasic.SetState(Gameplay_VehicleBasic.VehicleState.Stop);
+                ListVehicle.Add(vehicleBasic);
+            }
+        }
+        private void OnTriggerExit2D(Collider2D collision)
+        {
+            if (collision.TryGetComponent(out Gameplay_VehicleBasic vehicleBasic))
+            {
+
+            }
+        }
+        #region Traffic State Logic
         private void TrafficState_Tap()
         {
             currentDuration += Time.deltaTime;
@@ -158,9 +142,54 @@ namespace Gameplay_RoadLogic
                         Current_TrafficState = TrafficState.Idle;
                         currentDuration = 0;
                         maxBufferDuration = 0;
+                        foreach(Gameplay_VehicleBasic current_vehicle in ListVehicle)
+                        {
+                            current_vehicle.SetState(Gameplay_VehicleBasic.VehicleState.Move);
+                            ListVehicle.Clear();
+                        }
+                        AreaDetection.gameObject.SetActive(false);
                         break;
                 }
             }
         }
+        #endregion
+
+        #region Interface Override
+        public void State_Defocused()
+        {
+            visualIndicator.gameObject.SetActive(false);
+        }
+
+        public void State_Focused()
+        {
+            visualIndicator.gameObject.SetActive(true);
+        }
+
+        public void State_Hold()
+        {
+            if (Current_TrafficState != TrafficState.Idle) return;
+            Debug.Log($"<b>{gameObject.name}</b>\t: Set to Hold State");
+            Current_TrafficState = TrafficState.Hold;
+            currentDuration = 0;
+            maxBufferDuration = intervalSwitch;
+
+        }
+        public void State_CancelledHold()
+        {
+            if (Current_TrafficState != TrafficState.Hold) return;
+            Debug.Log($"<b>{gameObject.name}</b>\t: Set to Transition Exit State From Hold State");
+            Current_TrafficState = TrafficState.OnTransitionExit;
+            currentDuration = 0;
+        }
+        public void State_Tap()
+        {
+            if (Current_TrafficState != TrafficState.Idle) return;
+            Debug.Log($"<b>{gameObject.name}</b>\t: Set to Tap State");
+            Current_TrafficState = TrafficState.Tap;
+            currentDuration = 0;
+            maxBufferDuration = intervalSwitch;
+            AreaDetection.gameObject.SetActive(true);
+        }
+        #endregion
     }
 }
