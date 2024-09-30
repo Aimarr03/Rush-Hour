@@ -73,10 +73,12 @@ namespace Gameplay_RoadLogic
             Debug.Log(tilemap.cellBounds.allPositionsWithin);*/
 
             BoundsInt boundaryTilemap = tilemap.cellBounds;
-            Debug.Log($"XMin = {boundaryTilemap.xMin}");
+
+            /*Debug.Log($"XMin = {boundaryTilemap.xMin}");
             Debug.Log($"XMax= {boundaryTilemap.xMax}");
             Debug.Log($"YMin = {boundaryTilemap.yMin}");
-            Debug.Log($"YMax= {boundaryTilemap.yMax}");
+            Debug.Log($"YMax= {boundaryTilemap.yMax}");*/
+            
             for (int X_Index = boundaryTilemap.xMin; X_Index < boundaryTilemap.xMax; X_Index++)
             {
                 for (int Y_Index = boundaryTilemap.yMin; Y_Index < boundaryTilemap.yMax; Y_Index++)
@@ -89,9 +91,57 @@ namespace Gameplay_RoadLogic
                     allTiles.Add(gridPosition, newTile);
                 }
             }
+            List<Gameplay_RoadNode> List_IntersectedNodes = new List<Gameplay_RoadNode>();
+            
             foreach (Gameplay_RoadNode currentTile in allTiles.Values)
             {
                 SetTypeForNode(currentTile);
+                switch (currentTile.roadType)
+                {
+                    case Enum_RoadNode_Type.Edge: 
+                        EdgeTilesList.Add(currentTile);
+                        break;
+                    case Enum_RoadNode_Type.Tri:
+                        List_IntersectedNodes.Add(currentTile);
+                        break;
+                    case Enum_RoadNode_Type.Cross:
+                        List_IntersectedNodes.Add(currentTile);
+                        break;
+                }
+            }
+            Debug.Log("Engage to Find Edge from the ROAD");
+            foreach(Gameplay_RoadNode gameplay_RoadNode in List_IntersectedNodes)
+            {
+                foreach(Gameplay_RoadNode CurrentDirection_RoadNode in gameplay_RoadNode.AdjacentConnectedNodes)
+                {
+                    Debug.Log($"Start Position of Edge grid position {CurrentDirection_RoadNode.gridPosition} world position {CurrentDirection_RoadNode.worldPosition}");
+                    Debug.Log($"Center Position is grid position {gameplay_RoadNode.gridPosition} world position {gameplay_RoadNode.worldPosition}");
+                    Vector3Int CurrentDirection = CurrentDirection_RoadNode.gridPosition - gameplay_RoadNode.gridPosition;
+                    Debug.Log($"Current Direction is {CurrentDirection}"); 
+                    int multiplier = 1;
+                    Gameplay_RoadNode NextNode = null;
+                    if (CurrentDirection == Vector3.zero) continue;
+                    do
+                    {
+                        Vector3Int NextPosition = CurrentDirection_RoadNode.gridPosition + (CurrentDirection * multiplier);
+                        Debug.Log($"Next Position is {NextPosition}");
+                        NextNode = allTiles[NextPosition];
+                        
+                        multiplier++;
+                        if(NextNode == null) break;
+                        if(NextNode.roadType != Enum_RoadNode_Type.Straight)
+                        {
+                            Debug.Log($"The Neighbor is the end node for edge at grid position {NextNode.gridPosition} world position {NextNode.worldPosition}");
+                            Debug.Log($"The Length of Edge is {multiplier}");
+                            break;
+                        }
+                        else
+                        {
+                            Debug.Log($"The Neighbor is on the grid position of {NextNode.gridPosition} world position {NextNode.worldPosition}");
+                        }
+                    } while (NextNode.roadType == Enum_RoadNode_Type.Straight);
+                    
+                }
             }
         }
         /*private bool IsEdgeNode(Vector3Int Pos)
@@ -198,7 +248,7 @@ namespace Gameplay_RoadLogic
                     return RetracePath(startNode, endNode);
                 }
 
-                foreach (var neighbor in GetNeighbours(currentNode))
+                foreach (var neighbor in currentNode.AdjacentConnectedNodes)
                 {
                     if (!neighbor.walkable || CloseList.Contains(neighbor)) continue;
                     int newDistanceFromCurrentNodeToNeighbor = currentNode.GCost + GetDistanceBetweenNode(currentNode, neighbor);
@@ -217,7 +267,7 @@ namespace Gameplay_RoadLogic
 
             return null;
         }
-        private List<Gameplay_RoadNode> GetNeighbours(Gameplay_RoadNode currentNode)
+        /*private List<Gameplay_RoadNode> GetNeighbours(Gameplay_RoadNode currentNode)
         {
             List<Gameplay_RoadNode> neighbours = new List<Gameplay_RoadNode>();
             Vector3Int currentNodePos = currentNode.gridPosition;
@@ -240,8 +290,7 @@ namespace Gameplay_RoadLogic
             }
 
             return neighbours;
-
-        }
+        }*/
         private int GetDistanceBetweenNode(Gameplay_RoadNode startNode, Gameplay_RoadNode endNode)
         {
             Vector3Int startNodePos = startNode.gridPosition;

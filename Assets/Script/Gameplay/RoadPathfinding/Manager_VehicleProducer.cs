@@ -32,7 +32,7 @@ namespace GameplayManager
         /*private void Update()
         {
             currentDuration += Time.deltaTime;
-            if(currentDuration > currentIntervalToSpawn)
+            if (currentDuration > currentIntervalToSpawn)
             {
                 currentDuration = 0;
                 currentIntervalToSpawn = intervalToSpawn;
