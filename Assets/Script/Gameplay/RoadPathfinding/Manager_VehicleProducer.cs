@@ -48,7 +48,7 @@ namespace GameplayManager
             {
                 endNode = List_EdgeNodes[Random.Range(0, List_EdgeNodes.Count)];
             } while (startNode == endNode);
-            int range = Random.Range(3, 6);
+            int range = Random.Range(2, 4);
             StartCoroutine(SpawnVehicleWithCount(startNode.worldPosition, endNode.worldPosition, range));
         }
         private IEnumerator SpawnVehicleWithCount(Vector3 startPos, Vector3 endPos, int maxCount)
@@ -58,7 +58,7 @@ namespace GameplayManager
             {
                 Gameplay_VehicleBasic newCar = Instantiate(basicCar);
                 newCar.transform.position = startPos;
-                newCar.SetUpDestination(destinations, 3.5f);
+                newCar.SetUpDestination(destinations, 1.5f);
                 yield return new WaitForSeconds(intervalSpawnVehicle);
             }
             yield return null;

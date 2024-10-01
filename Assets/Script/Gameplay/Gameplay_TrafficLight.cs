@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,9 +19,10 @@ namespace Gameplay_RoadLogic
         [SerializeField] private Collider2D AreaDetection;
 
         [SerializeField] private SpriteRenderer visualIndicator;
-        [SerializeField] private Transform StopPosition;
+        [SerializeField] public Transform StopPosition;
 
         private List<Gameplay_VehicleBasic> ListVehicle;
+        public event Action<LightState> Event_ChangeLightState;
         public enum TrafficState
         {
             Idle,
@@ -39,7 +41,8 @@ namespace Gameplay_RoadLogic
         {
             Current_TrafficState = TrafficState.Idle;
             ListVehicle = new List<Gameplay_VehicleBasic>();
-            Current_LightState = LightState.Red;
+            Current_LightState = LightState.Green;
+            AreaDetection.gameObject.SetActive(false);
         }
 
         private void Update()
@@ -65,6 +68,7 @@ namespace Gameplay_RoadLogic
             if(collision.TryGetComponent(out Gameplay_VehicleBasic vehicleBasic))
             {
                 vehicleBasic.SetState(Gameplay_VehicleBasic.VehicleState.Stop);
+                vehicleBasic.SetTrafficLight(this);
                 ListVehicle.Add(vehicleBasic);
             }
         }
@@ -72,58 +76,12 @@ namespace Gameplay_RoadLogic
         {
             if (collision.TryGetComponent(out Gameplay_VehicleBasic vehicleBasic))
             {
-
+                vehicleBasic.SetTrafficLight(null);
+                ListVehicle.Remove(vehicleBasic);
             }
         }
         #region Traffic State Logic
         private void TrafficState_Tap()
-        {
-            currentDuration += Time.deltaTime;
-            if (currentDuration > maxBufferDuration && Current_LightState != LightState.Green)
-            {
-                currentDuration = 0;
-                switch (Current_LightState)
-                {
-                    case LightState.Red:
-                        Debug.Log($"<b>{gameObject.name}</b>: Change To <color=yellow>Yellow Light</color>");
-                        Current_LightState = LightState.Yellow;
-                        break;
-                    case LightState.Yellow:
-                        Debug.Log($"<b>{gameObject.name}</b>: Change To <color=green>Green Light</color>");
-                        Current_LightState = LightState.Green;
-                        maxBufferDuration = intervalHold;
-                        break;
-                }
-            }
-            else if (currentDuration > maxBufferDuration && Current_LightState == LightState.Green)
-            {
-                Debug.Log($"<b>{gameObject.name}</b>: Change To Transition Exit State");
-                Current_TrafficState = TrafficState.OnTransitionExit;
-                currentDuration = 0;
-                maxBufferDuration = intervalSwitch;
-            }
-        }
-        private void TrafficState_Hold()
-        {
-            if (Current_LightState == LightState.Green) return;
-            currentDuration += Time.deltaTime;
-            if (currentDuration > maxBufferDuration && Current_LightState != LightState.Green)
-            {
-                currentDuration = 0;
-                switch (Current_LightState)
-                {
-                    case LightState.Red:
-                        Debug.Log($"<b>{gameObject.name}</b>: Change To <color=yellow>Yellow Light</color>");
-                        Current_LightState = LightState.Yellow;
-                        break;
-                    case LightState.Yellow:
-                        Debug.Log($"<b>{gameObject.name}</b>: Change To <color=green>Green Light</color>");
-                        Current_LightState = LightState.Green;
-                        break;
-                }
-            }
-        }
-        private void TrafficState_OnTransitionExit()
         {
             currentDuration += Time.deltaTime;
             if (currentDuration > maxBufferDuration && Current_LightState != LightState.Red)
@@ -137,16 +95,62 @@ namespace Gameplay_RoadLogic
                         break;
                     case LightState.Yellow:
                         Debug.Log($"<b>{gameObject.name}</b>: Change To <color=red>Red Light</color>");
-                        Debug.Log($"<b>{gameObject.name}</b>: Change To Idle State");
                         Current_LightState = LightState.Red;
+                        maxBufferDuration = intervalHold;
+                        AreaDetection.gameObject.SetActive(true);
+                        break;
+                }
+            }
+            else if (currentDuration > maxBufferDuration && Current_LightState == LightState.Red)
+            {
+                Debug.Log($"<b>{gameObject.name}</b>: Change To Transition Exit State");
+                Current_TrafficState = TrafficState.OnTransitionExit;
+                currentDuration = 0;
+                maxBufferDuration = intervalSwitch;
+            }
+        }
+        private void TrafficState_Hold()
+        {
+            if (Current_LightState == LightState.Red) return;
+            currentDuration += Time.deltaTime;
+            if (currentDuration > maxBufferDuration && Current_LightState != LightState.Red)
+            {
+                currentDuration = 0;
+                switch (Current_LightState)
+                {
+                    case LightState.Green:
+                        Debug.Log($"<b>{gameObject.name}</b>: Change To <color=yellow>Yellow Light</color>");
+                        Current_LightState = LightState.Yellow;
+                        break;
+                    case LightState.Yellow:
+                        Debug.Log($"<b>{gameObject.name}</b>: Change To <color=red>Red Light</color>");
+                        Current_LightState = LightState.Red;
+                        AreaDetection.gameObject.SetActive(true);
+                        break;
+                }
+            }
+        }
+        private void TrafficState_OnTransitionExit()
+        {
+            currentDuration += Time.deltaTime;
+            if (currentDuration > maxBufferDuration && Current_LightState != LightState.Green)
+            {
+                currentDuration = 0;
+                switch (Current_LightState)
+                {
+                    case LightState.Red:
+                        Debug.Log($"<b>{gameObject.name}</b>: Change To <color=yellow>Yellow Light</color>");
+                        Current_LightState = LightState.Yellow;
+                        break;
+                    case LightState.Yellow:
+                        Debug.Log($"<b>{gameObject.name}</b>: Change To <color=green>Green Light</color>");
+                        Debug.Log($"<b>{gameObject.name}</b>: Change To Idle State");
+                        Current_LightState = LightState.Green;
                         Current_TrafficState = TrafficState.Idle;
                         currentDuration = 0;
                         maxBufferDuration = 0;
-                        foreach(Gameplay_VehicleBasic current_vehicle in ListVehicle)
-                        {
-                            current_vehicle.SetState(Gameplay_VehicleBasic.VehicleState.Move);
-                            ListVehicle.Clear();
-                        }
+
+                        Event_ChangeLightState?.Invoke(Current_LightState);
                         AreaDetection.gameObject.SetActive(false);
                         break;
                 }
@@ -188,7 +192,6 @@ namespace Gameplay_RoadLogic
             Current_TrafficState = TrafficState.Tap;
             currentDuration = 0;
             maxBufferDuration = intervalSwitch;
-            AreaDetection.gameObject.SetActive(true);
         }
         #endregion
     }
