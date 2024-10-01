@@ -9,10 +9,12 @@ namespace Gameplay_RoadLogic
         public enum VehicleState
         {
             Stop,
+            TrafficLightStop,
             Move,
             Reach
         }
         [SerializeField, Range(5, 12)] private float movementSpeed;
+        [SerializeField] LayerMask vehicleMask;
         private Queue<Gameplay_RoadNode> destinations;
         private Vector3 targetPosition;
 
@@ -20,10 +22,12 @@ namespace Gameplay_RoadLogic
         private Vector3 bufferTargetPosition;
 
         private VehicleState currentState;
+        private Collider2D vehicle_Collider;
         #region MONOBEHAVIOUR CALLBACK
         private void Awake()
         {
             destinations = new Queue<Gameplay_RoadNode>();
+            vehicle_Collider = GetComponent<Collider2D>();
             currentState = VehicleState.Stop;
         }
         private void Start()
@@ -45,6 +49,8 @@ namespace Gameplay_RoadLogic
             switch (currentState)
             {
                 case VehicleState.Stop:
+                    break;
+                case VehicleState.TrafficLightStop:
                     HandleStopLogic();
                     break;
                 case VehicleState.Move:
@@ -54,17 +60,30 @@ namespace Gameplay_RoadLogic
                     break;
             }
         }
+        private void OnDrawGizmos()
+        {
+            if (currentState == VehicleState.TrafficLightStop || currentState == VehicleState.Stop)
+            {
+                Vector3 boxCenter = vehicle_Collider.bounds.center;
+                Vector3 direction = (currentTrafficLightToStop.StopPosition.position - (Vector3)boxCenter).normalized;
+                Vector3 rayEnd = boxCenter + direction * 0.6f;
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawLine(transform.position, rayEnd);
+            }
+        }
         #endregion
         #region StateLogic
         public void SetState(VehicleState state)
         {
             switch (state)
             {
-                case VehicleState.Stop:
+                case VehicleState.TrafficLightStop:
                     bufferTargetPosition = targetPosition;
+                    targetPosition = currentTrafficLightToStop.StopPosition.position;
                     break;
                 case VehicleState.Move:
                     targetPosition = bufferTargetPosition;
+                    
                     bufferTargetPosition = Vector3.zero;
                     break;
             }
@@ -93,13 +112,36 @@ namespace Gameplay_RoadLogic
             }
         }
         #endregion
-        #region StopLogic
+        #region TrafficStopLogic
         private void HandleStopLogic()
         {
-            if(targetPosition != null) bufferTargetPosition = targetPosition;
-            if(Vector2.Distance(transform.position, currentTrafficLightToStop.StopPosition.position) > 0.01f)
+            Vector2 boxCenter = vehicle_Collider.bounds.center;
+            Vector2 direction = (targetPosition - (Vector3)boxCenter).normalized;
+
+            bool hitVehicle = false;
+            RaycastHit2D[] hitVehicleDatas = Physics2D.LinecastAll(boxCenter, direction * 0.4f, vehicleMask);
+            foreach(RaycastHit2D hitVehicleData in  hitVehicleDatas)
             {
-                transform.position = Vector2.MoveTowards(transform.position, currentTrafficLightToStop.StopPosition.position, movementSpeed * Time.deltaTime);
+                Debug.Log(hitVehicleData.collider);
+                if(hitVehicleData.collider.gameObject != gameObject)
+                {
+                    hitVehicle = true;
+                    break;
+                }
+            }
+            Debug.Log(hitVehicle);
+            if(Vector3.Distance(transform.position, bufferTargetPosition) <= 0.01f)
+            {
+                bufferTargetPosition = destinations.Dequeue().worldPosition;
+                Debug.Log("Dequeue more");
+            }
+            if (Vector2.Distance(transform.position, targetPosition) > 0.01f && !hitVehicle)
+            {
+                transform.position = Vector2.MoveTowards(transform.position, targetPosition, movementSpeed * Time.deltaTime);
+            }
+            else
+            {
+                currentState = VehicleState.Stop;
             }
         }
         #endregion

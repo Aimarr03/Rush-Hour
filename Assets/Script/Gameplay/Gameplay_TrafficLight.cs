@@ -67,8 +67,8 @@ namespace Gameplay_RoadLogic
             Debug.Log("Enter Vehicle");
             if(collision.TryGetComponent(out Gameplay_VehicleBasic vehicleBasic))
             {
-                vehicleBasic.SetState(Gameplay_VehicleBasic.VehicleState.Stop);
                 vehicleBasic.SetTrafficLight(this);
+                vehicleBasic.SetState(Gameplay_VehicleBasic.VehicleState.TrafficLightStop);
                 ListVehicle.Add(vehicleBasic);
             }
         }

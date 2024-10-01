@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3446990883143823534}
   - component: {fileID: 5470005300876573956}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Visual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 5352213898814246515}
   - component: {fileID: 5509844238995910814}
   - component: {fileID: 5551889892833667202}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: BasicVehicle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -133,6 +133,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 5
+  vehicleMask:
+    serializedVersion: 2
+    m_Bits: 64
+  currentTrafficLightToStop: {fileID: 0}
 --- !u!50 &5509844238995910814
 Rigidbody2D:
   serializedVersion: 4
@@ -192,7 +196,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.026349753, y: -0.08958888}
+  m_Offset: {x: -0.026349753, y: -0.014053151}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -203,7 +207,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.4905731, y: 0.19545716}
+  m_Size: {x: 0.4905731, y: 0.34652868}
   m_EdgeRadius: 0
 --- !u!1 &7594064017946331101
 GameObject:
@@ -215,7 +219,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3432393346920167804}
   - component: {fileID: 283870456516870249}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}

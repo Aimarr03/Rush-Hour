@@ -14,10 +14,10 @@ namespace GameplayManager
 
         private float currentDuration;
         private float currentIntervalToSpawn;
-        private float intervalSpawnVehicle = 0.25f;
+        private float intervalSpawnVehicle = 0.75f;
         
-        private float minDuration = 0.5f;
-        private float maxDuration = 1.2f;
+        private float minDuration = 2.5f;
+        private float maxDuration = 4.2f;
         private float intervalToSpawn => Random.Range(minDuration, maxDuration);
         private void Awake()
         {
