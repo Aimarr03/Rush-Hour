@@ -13,6 +13,10 @@ namespace Gameplay_RoadLogic
             Move,
             Reach
         }
+        public enum Direction
+        {
+            Up, Left, Right, Down
+        }
         [SerializeField, Range(5, 12)] private float movementSpeed;
         [SerializeField] LayerMask vehicleMask;
         private Queue<Gameplay_RoadNode> destinations;
@@ -22,6 +26,7 @@ namespace Gameplay_RoadLogic
         private Vector3 bufferTargetPosition;
 
         private VehicleState currentState;
+        public Direction currentDirection;
         private Collider2D vehicle_Collider;
         #region MONOBEHAVIOUR CALLBACK
         private void Awake()
@@ -43,6 +48,7 @@ namespace Gameplay_RoadLogic
             //Debug.Log(destinations.Count);
             targetPosition = this.destinations.Dequeue().worldPosition;
             currentState = VehicleState.Move;
+            OnSetCurrentDirection();
         }
         void Update()
         {
@@ -51,7 +57,7 @@ namespace Gameplay_RoadLogic
                 case VehicleState.Stop:
                     break;
                 case VehicleState.TrafficLightStop:
-                    HandleStopLogic();
+                    HandleTrafficStopLogic();
                     break;
                 case VehicleState.Move:
                     HandleMovementLogic();
@@ -83,7 +89,7 @@ namespace Gameplay_RoadLogic
                     break;
                 case VehicleState.Move:
                     targetPosition = bufferTargetPosition;
-                    
+                    OnSetCurrentDirection();
                     bufferTargetPosition = Vector3.zero;
                     break;
             }
@@ -113,13 +119,14 @@ namespace Gameplay_RoadLogic
         }
         #endregion
         #region TrafficStopLogic
-        private void HandleStopLogic()
+        private void HandleTrafficStopLogic()
         {
             Vector2 boxCenter = vehicle_Collider.bounds.center;
-            Vector2 direction = (targetPosition - (Vector3)boxCenter).normalized;
-
+            Vector2 distanceFromVehicle = targetPosition - (Vector3)boxCenter;
+            Vector2 direction = distanceFromVehicle.normalized;
+            
             bool hitVehicle = false;
-            RaycastHit2D[] hitVehicleDatas = Physics2D.LinecastAll(boxCenter, direction * 0.4f, vehicleMask);
+            RaycastHit2D[] hitVehicleDatas = Physics2D.LinecastAll(boxCenter, direction * 0.8f, vehicleMask);
             foreach(RaycastHit2D hitVehicleData in  hitVehicleDatas)
             {
                 Debug.Log(hitVehicleData.collider);
@@ -129,7 +136,7 @@ namespace Gameplay_RoadLogic
                     break;
                 }
             }
-            Debug.Log(hitVehicle);
+          
             if(Vector3.Distance(transform.position, bufferTargetPosition) <= 0.01f)
             {
                 bufferTargetPosition = destinations.Dequeue().worldPosition;
@@ -156,7 +163,9 @@ namespace Gameplay_RoadLogic
             {
                 if(destinations.Count > 0)
                 {
+
                     targetPosition = destinations.Dequeue().worldPosition;
+                    OnSetCurrentDirection();
                     //Debug.Log("Change Destinations");
                 }
                 else
@@ -164,6 +173,17 @@ namespace Gameplay_RoadLogic
                     currentState = VehicleState.Reach;
                 }
             }
+        }
+        private void OnSetCurrentDirection()
+        {
+            Vector3 calculateDistance = targetPosition - transform.position;
+            Debug.Log(calculateDistance);
+            float x = calculateDistance.x;
+            float y = calculateDistance.y;
+            if (x > 0 && y > 0) currentDirection = Direction.Up;
+            else if (x < 0 && y < 0) currentDirection = Direction.Down;
+            else if (x > 0 && y < 0) currentDirection = Direction.Right;
+            else if (x < 0 && y > 0) currentDirection = Direction.Left;
         }
         #endregion
     }
