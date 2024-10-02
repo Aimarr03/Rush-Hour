@@ -86,6 +86,9 @@ namespace Gameplay_RoadLogic
                 case VehicleState.TrafficLightStop:
                     bufferTargetPosition = targetPosition;
                     targetPosition = currentTrafficLightToStop.StopPosition.position;
+                    Vector2 boxCenter = vehicle_Collider.bounds.center;
+                    Vector2 distanceFromVehicle = targetPosition - (Vector3)boxCenter;
+                    Vector2 direction = distanceFromVehicle.normalized;
                     break;
                 case VehicleState.Move:
                     targetPosition = bufferTargetPosition;

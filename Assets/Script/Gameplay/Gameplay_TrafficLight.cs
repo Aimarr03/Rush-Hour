@@ -9,6 +9,7 @@ namespace Gameplay_RoadLogic
     public class Gameplay_TrafficLight : MonoBehaviour, I_Navigation
     {
         public TrafficState Current_TrafficState;
+        public Gameplay_VehicleBasic.Direction targetDirection;
         public LightState Current_LightState;
 
         private float currentDuration = 0;
@@ -67,6 +68,7 @@ namespace Gameplay_RoadLogic
             Debug.Log("Enter Vehicle");
             if(collision.TryGetComponent(out Gameplay_VehicleBasic vehicleBasic))
             {
+                if (vehicleBasic.currentDirection != targetDirection) return;
                 vehicleBasic.SetTrafficLight(this);
                 vehicleBasic.SetState(Gameplay_VehicleBasic.VehicleState.TrafficLightStop);
                 ListVehicle.Add(vehicleBasic);
