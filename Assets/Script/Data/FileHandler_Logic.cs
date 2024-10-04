@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Data_Logic
 {
-    public class FileHandler_Logic : MonoBehaviour
+    public class FileHandler_Logic
     {
         public string directoryPath;
         public string fileName;

@@ -10,6 +10,7 @@ public class Manager_Input : MonoBehaviour
     private Input_PlayerOne playerOne_Input;
     public static event Action<float> Event_Navigation;
     public static event Action<PressedState> Event_Interract;
+    public static event Action Event_Negate;
     private void Awake()
     {
         playerOne_Input = new Input_PlayerOne();
@@ -73,7 +74,8 @@ public class Manager_Input : MonoBehaviour
     private void Gameplay_Pause_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
         Debug.Log($"<color=green><b>Gameplay</b></color>\t: Performed Paused");
-        Manager_Game.instance.SetGameState(Manager_Game.GameState.UI);
+        Event_Negate?.Invoke();
+        //Manager_Game.instance.SetGameState(Manager_Game.GameState.UI);
     }
     #endregion
 
@@ -81,12 +83,14 @@ public class Manager_Input : MonoBehaviour
     private void UI_Resume_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
         Debug.Log($"<color=orange><b>UI</b></color>\t: Perforemd Resume");
-        Manager_Game.instance.SetGameState(Manager_Game.GameState.Gameplay);
+        Event_Negate?.Invoke();
+        //Manager_Game.instance.SetGameState(Manager_Game.GameState.Gameplay);
     }
 
     private void UI_Interract_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
         Debug.Log($"<color=orange><b>UI</b></color>\t: Performed Interract ");
+        Event_Interract?.Invoke(PressedState.Tap);
     }
 
     private void UI_Navigation_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,8 +6,10 @@ using UnityEngine;
 
 namespace Data_Logic
 {
+    [Serializable]
     public class GameData
     {
+        [Serializable]
         public class LevelData
         {
             public int score;

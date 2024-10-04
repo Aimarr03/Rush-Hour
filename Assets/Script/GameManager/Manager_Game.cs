@@ -32,7 +32,7 @@ namespace GameplayManager
         }
         private void Start()
         {
-            SetGameState(GameState.Gameplay);
+            //SetGameState(GameState.Gameplay);
         }
 
         public void SetGameState(GameState gameState)
