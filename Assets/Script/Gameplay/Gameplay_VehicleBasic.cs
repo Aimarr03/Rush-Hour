@@ -104,10 +104,6 @@ namespace Gameplay_RoadLogic
             {
                 trafficLight.Event_ChangeLightState += CurrentTrafficLightToStop_Event_ChangeLightState;
             }
-            else
-            {
-                currentTrafficLightToStop.Event_ChangeLightState -= CurrentTrafficLightToStop_Event_ChangeLightState;
-            }
             currentTrafficLightToStop = trafficLight;
         }
 
@@ -117,6 +113,7 @@ namespace Gameplay_RoadLogic
             {
                 case Gameplay_TrafficLight.LightState.Green:
                     SetState(VehicleState.Move);
+                    currentTrafficLightToStop.Event_ChangeLightState -= CurrentTrafficLightToStop_Event_ChangeLightState;
                     break;
             }
         }
