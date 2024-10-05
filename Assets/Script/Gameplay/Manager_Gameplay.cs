@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Gameplay_RoadLogic;
 using System.Linq;
+using Unity.VisualScripting;
 
 namespace GameplayManager
 {
@@ -36,6 +37,7 @@ namespace GameplayManager
             //Manager_Game.instance.OnChangeGameState += Instance_OnChangeGameState;
             Manager_Input.Event_Navigation += Manager_Input_Event_Navigation;
             Manager_Input.Event_Interract += Manager_Input_Event_Interract;
+            Manager_Game.instance.SetGameState(state);
         }
         private void OnDisable()
         {

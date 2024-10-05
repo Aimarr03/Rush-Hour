@@ -68,7 +68,7 @@ namespace Gameplay_RoadLogic
         }
         private void OnDrawGizmos()
         {
-            if (currentState == VehicleState.TrafficLightStop || currentState == VehicleState.Stop)
+            if (currentState == VehicleState.TrafficLightStop || currentState == VehicleState.Stop && currentTrafficLightToStop != null)
             {
                 Vector3 boxCenter = vehicle_Collider.bounds.center;
                 Vector3 direction = (currentTrafficLightToStop.StopPosition.position - (Vector3)boxCenter).normalized;
@@ -81,6 +81,7 @@ namespace Gameplay_RoadLogic
         #region StateLogic
         public void SetState(VehicleState state)
         {
+            Debug.Log("Set State to " + state);
             switch (state)
             {
                 case VehicleState.TrafficLightStop:
@@ -100,23 +101,9 @@ namespace Gameplay_RoadLogic
         }
         public void SetTrafficLight(Gameplay_TrafficLight trafficLight)
         {
-            if(trafficLight != null)
-            {
-                trafficLight.Event_ChangeLightState += CurrentTrafficLightToStop_Event_ChangeLightState;
-            }
             currentTrafficLightToStop = trafficLight;
         }
 
-        private void CurrentTrafficLightToStop_Event_ChangeLightState(Gameplay_TrafficLight.LightState trafficLight)
-        {
-            switch(trafficLight)
-            {
-                case Gameplay_TrafficLight.LightState.Green:
-                    SetState(VehicleState.Move);
-                    currentTrafficLightToStop.Event_ChangeLightState -= CurrentTrafficLightToStop_Event_ChangeLightState;
-                    break;
-            }
-        }
         #endregion
         #region TrafficStopLogic
         private void HandleTrafficStopLogic()
@@ -129,7 +116,7 @@ namespace Gameplay_RoadLogic
             RaycastHit2D[] hitVehicleDatas = Physics2D.LinecastAll(boxCenter, direction * 0.8f, vehicleMask);
             foreach(RaycastHit2D hitVehicleData in  hitVehicleDatas)
             {
-                Debug.Log(hitVehicleData.collider);
+                //Debug.Log(hitVehicleData.collider);
                 if(hitVehicleData.collider.gameObject != gameObject)
                 {
                     hitVehicle = true;

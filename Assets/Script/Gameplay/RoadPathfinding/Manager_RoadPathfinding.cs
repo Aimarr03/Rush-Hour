@@ -109,15 +109,15 @@ namespace Gameplay_RoadLogic
                         break;
                 }
             }
-            Debug.Log("Engage to Find Edge from the ROAD");
+            /*Debug.Log("Engage to Find Edge from the ROAD");*/
             foreach(Gameplay_RoadNode gameplay_RoadNode in List_IntersectedNodes)
             {
                 foreach(Gameplay_RoadNode CurrentDirection_RoadNode in gameplay_RoadNode.AdjacentConnectedNodes)
                 {
                     Debug.Log($"Start Position of Edge grid position {CurrentDirection_RoadNode.gridPosition} world position {CurrentDirection_RoadNode.worldPosition}");
-                    Debug.Log($"Center Position is grid position {gameplay_RoadNode.gridPosition} world position {gameplay_RoadNode.worldPosition}");
+                    /*Debug.Log($"Center Position is grid position {gameplay_RoadNode.gridPosition} world position {gameplay_RoadNode.worldPosition}");*/
                     Vector3Int CurrentDirection = CurrentDirection_RoadNode.gridPosition - gameplay_RoadNode.gridPosition;
-                    Debug.Log($"Current Direction is {CurrentDirection}"); 
+                    /*Debug.Log($"Current Direction is {CurrentDirection}"); */
                     int multiplier = 1;
                     Gameplay_RoadNode NextNode = null;
                     if (CurrentDirection == Vector3.zero) continue;
@@ -131,13 +131,13 @@ namespace Gameplay_RoadLogic
                         if(NextNode == null) break;
                         if(NextNode.roadType != Enum_RoadNode_Type.Straight)
                         {
-                            Debug.Log($"The Neighbor is the end node for edge at grid position {NextNode.gridPosition} world position {NextNode.worldPosition}");
-                            Debug.Log($"The Length of Edge is {multiplier}");
+                            /*Debug.Log($"The Neighbor is the end node for edge at grid position {NextNode.gridPosition} world position {NextNode.worldPosition}");
+                            Debug.Log($"The Length of Edge is {multiplier}");*/
                             break;
                         }
                         else
                         {
-                            Debug.Log($"The Neighbor is on the grid position of {NextNode.gridPosition} world position {NextNode.worldPosition}");
+                            //Debug.Log($"The Neighbor is on the grid position of {NextNode.gridPosition} world position {NextNode.worldPosition}");
                         }
                     } while (NextNode.roadType == Enum_RoadNode_Type.Straight);
                     

@@ -589,6 +589,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5592359760459776168, guid: 12a9aa5bd5d94dd48a1f68bc0aa45219, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5592359760459776168, guid: 12a9aa5bd5d94dd48a1f68bc0aa45219, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.7500001
+      objectReference: {fileID: 0}
     - target: {fileID: 8562651339720968180, guid: 12a9aa5bd5d94dd48a1f68bc0aa45219, type: 3}
       propertyPath: m_Name
       value: TrafficLight For Left Road
