@@ -10,7 +10,7 @@ public class Manager_Input : MonoBehaviour
     private Input_PlayerOne playerOne_Input;
     public static event Action<float> Event_Navigation;
     public static event Action<PressedState> Event_Interract;
-    public static event Action Event_Negate;
+    public static event Action<Manager_Game.GameState> Event_Negate;
     private void Awake()
     {
         playerOne_Input = new Input_PlayerOne();
@@ -74,7 +74,7 @@ public class Manager_Input : MonoBehaviour
     private void Gameplay_Pause_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
         Debug.Log($"<color=green><b>Gameplay</b></color>\t: Performed Paused");
-        Event_Negate?.Invoke();
+        Event_Negate?.Invoke(Manager_Game.instance.currentGameState);
         //Manager_Game.instance.SetGameState(Manager_Game.GameState.UI);
     }
     #endregion
@@ -83,7 +83,7 @@ public class Manager_Input : MonoBehaviour
     private void UI_Resume_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
         Debug.Log($"<color=orange><b>UI</b></color>\t: Perforemd Resume");
-        Event_Negate?.Invoke();
+        Event_Negate?.Invoke(Manager_Game.instance.currentGameState);
         //Manager_Game.instance.SetGameState(Manager_Game.GameState.Gameplay);
     }
 

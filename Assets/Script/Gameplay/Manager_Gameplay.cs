@@ -34,19 +34,13 @@ namespace GameplayManager
         }
         private void Start()
         {
-            //Manager_Game.instance.OnChangeGameState += Instance_OnChangeGameState;
-            Manager_Input.Event_Navigation += Manager_Input_Event_Navigation;
-            Manager_Input.Event_Interract += Manager_Input_Event_Interract;
-            Manager_Input.Event_Negate += Manager_Input_Event_Negate;
-            
+            OnAddEventHandler();
+
             Manager_Game.instance.SetGameState(state);
         }
         private void OnDisable()
         {
-            //Manager_Game.instance.OnChangeGameState -= Instance_OnChangeGameState;
-            Manager_Input.Event_Navigation -= Manager_Input_Event_Navigation;
-            Manager_Input.Event_Interract -= Manager_Input_Event_Interract;
-            Manager_Input.Event_Negate -= Manager_Input_Event_Negate;
+            OnRemoveEventHandler();
         }
 
         private void Manager_Input_Event_Navigation(float read_value)
@@ -89,11 +83,29 @@ namespace GameplayManager
                     break;
             }
         }
-        private void Manager_Input_Event_Negate()
+        private void Manager_Input_Event_Negate(Manager_Game.GameState gameState)
         {
+            if (!CheckState(gameState)) return;
+            Debug.Log("Negate On Gameplay");
             Manager_Game.instance.SetGameState(Manager_Game.GameState.UI);
         }
         private bool CheckState() => state == Manager_Game.instance.currentGameState;
+        private bool CheckState(Manager_Game.GameState gameState) => state == gameState;
+
+        private void OnAddEventHandler()
+        {
+            Debug.Log("Add Callbacks");
+            Manager_Input.Event_Navigation += Manager_Input_Event_Navigation;
+            Manager_Input.Event_Interract += Manager_Input_Event_Interract;
+            Manager_Input.Event_Negate += Manager_Input_Event_Negate;
+        }
+        private void OnRemoveEventHandler()
+        {
+            Debug.Log("Remove Callbacks");
+            Manager_Input.Event_Navigation -= Manager_Input_Event_Navigation;
+            Manager_Input.Event_Interract -= Manager_Input_Event_Interract;
+            Manager_Input.Event_Negate -= Manager_Input_Event_Negate;
+        }
     }
 }
 
