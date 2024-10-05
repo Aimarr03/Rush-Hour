@@ -93,6 +93,7 @@ namespace Gameplay_RoadLogic
                     break;
                 case VehicleState.Move:
                     targetPosition = bufferTargetPosition;
+                    CheckBufferPositionAgain();
                     OnSetCurrentDirection();
                     bufferTargetPosition = Vector3.zero;
                     break;
@@ -137,6 +138,38 @@ namespace Gameplay_RoadLogic
             {
                 currentState = VehicleState.Stop;
             }
+        }
+        private void CheckBufferPositionAgain()
+        {   
+            Vector3 direction = targetPosition - transform.position;
+            bool shouldIterate = calculateDirectionToReiterate(direction);
+            while(shouldIterate)
+            {
+                targetPosition = destinations.Dequeue().worldPosition;
+                direction = targetPosition - transform.position;
+                shouldIterate = calculateDirectionToReiterate(direction);
+            }
+        }
+        //This is to check whether the vehicle is behind the target position or not
+        private bool calculateDirectionToReiterate(Vector3 direction)
+        {
+            bool result = false;
+            switch (currentDirection)
+            {
+                case Direction.Up:
+                    result = direction.x > 0 && direction.y > 0;
+                    break;
+                case Direction.Down:
+                    result= direction.x < 0 && direction.y < 0;
+                    break;
+                case Direction.Left:
+                    result = direction.x < 0 && direction.y > 0;
+                    break;
+                case Direction.Right:
+                    result = direction.x > 0 && direction.y < 0;
+                    break;
+            }
+            return !result;
         }
         #endregion
         #region MoveLogic
