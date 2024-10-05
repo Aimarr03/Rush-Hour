@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class MainMenu_Button : MonoBehaviour, I_Navigation
 {
     public Image imageFocus;
+    public UnityEvent InterractAction;
     private void Awake()
     {
         imageFocus = GetComponent<Image>();
@@ -27,12 +29,13 @@ public class MainMenu_Button : MonoBehaviour, I_Navigation
 
     public void State_Hold()
     {
-        Debug.Log($"Interract with {gameObject.name} Button");
+        
     }
 
     public void State_Tap()
     {
-        
+        Debug.Log($"Interract with {gameObject.name} Button");
+        InterractAction?.Invoke();
     }
 
 }

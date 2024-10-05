@@ -58,6 +58,27 @@ namespace MainMenuManager
             currentButton?.State_Tap();
         }
         private bool CheckState() => Manager_Game.instance?.currentGameState == state;
+
+        public void NewGame()
+        {
+            //On Start New Game
+        }
+        public void ContinueGame()
+        {
+            //On Load Continue Game
+        }
+        public void Settings()
+        {
+            //On Load Settings
+        }
+        public void Credits()
+        {
+            //On Load Credits
+        }
+        public void Exit()
+        {
+            Application.Quit();
+        }
     }
 }
 

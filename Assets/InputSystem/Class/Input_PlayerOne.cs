@@ -44,7 +44,7 @@ namespace InputManager
                     ""id"": ""9d172d27-3cd7-4eab-82ec-a6749ab1e62e"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": ""Tap(duration=0.1),Hold(pressPoint=0.5)"",
+                    ""interactions"": ""Tap(duration=0.35),Hold(pressPoint=0.5)"",
                     ""initialStateCheck"": false
                 },
                 {
@@ -185,7 +185,7 @@ namespace InputManager
                     ""name"": """",
                     ""id"": ""c1b16aca-b972-49ea-a00a-9451527978a7"",
                     ""path"": ""<Keyboard>/w"",
-                    ""interactions"": ""Hold,Tap"",
+                    ""interactions"": ""Hold,Tap(duration=0.35)"",
                     ""processors"": """",
                     ""groups"": ""Default Scheme"",
                     ""action"": ""Interract"",
@@ -224,7 +224,7 @@ namespace InputManager
                     ""id"": ""ecf0c5c3-f9a5-48c4-9534-bf1e1d45dcdb"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": ""Tap(duration=0.1,pressPoint=0.2),Hold(duration=0.3,pressPoint=0.2)"",
+                    ""interactions"": ""Tap(duration=0.35),Hold"",
                     ""initialStateCheck"": false
                 }
             ],
