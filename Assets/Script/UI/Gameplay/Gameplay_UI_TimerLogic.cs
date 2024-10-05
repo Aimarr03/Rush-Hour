@@ -1,3 +1,4 @@
+using GameplayManager;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -18,6 +19,7 @@ namespace Gameplay_UI
         }
         private void Update()
         {
+            if (Manager_Game.instance.currentGameState != Manager_Game.GameState.Gameplay) return;
             currentTimer -= Time.deltaTime;
             OnCalculateClockFormat();
         }

@@ -4,15 +4,5 @@ using UnityEngine;
 
 public class Gameplay_UI_ScoreLogic : MonoBehaviour
 {
-    
-    void Start()
-    {
-        
-    }
-
-    
-    void Update()
-    {
-        
-    }
+    //Testing
 }
