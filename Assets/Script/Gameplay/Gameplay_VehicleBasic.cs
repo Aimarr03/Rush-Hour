@@ -1,3 +1,4 @@
+using GameplayManager;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -52,6 +53,7 @@ namespace Gameplay_RoadLogic
         }
         void Update()
         {
+            if (Manager_Game.instance.currentGameState != Manager_Game.GameState.Gameplay) return;
             switch (currentState)
             {
                 case VehicleState.Stop:

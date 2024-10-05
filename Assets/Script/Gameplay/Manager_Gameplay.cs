@@ -37,6 +37,8 @@ namespace GameplayManager
             //Manager_Game.instance.OnChangeGameState += Instance_OnChangeGameState;
             Manager_Input.Event_Navigation += Manager_Input_Event_Navigation;
             Manager_Input.Event_Interract += Manager_Input_Event_Interract;
+            Manager_Input.Event_Negate += Manager_Input_Event_Negate;
+            
             Manager_Game.instance.SetGameState(state);
         }
         private void OnDisable()
@@ -44,6 +46,7 @@ namespace GameplayManager
             //Manager_Game.instance.OnChangeGameState -= Instance_OnChangeGameState;
             Manager_Input.Event_Navigation -= Manager_Input_Event_Navigation;
             Manager_Input.Event_Interract -= Manager_Input_Event_Interract;
+            Manager_Input.Event_Negate -= Manager_Input_Event_Negate;
         }
 
         private void Manager_Input_Event_Navigation(float read_value)
@@ -85,6 +88,10 @@ namespace GameplayManager
                     currentTrafficLight.State_CancelledHold();
                     break;
             }
+        }
+        private void Manager_Input_Event_Negate()
+        {
+            Manager_Game.instance.SetGameState(Manager_Game.GameState.UI);
         }
         private bool CheckState() => state == Manager_Game.instance.currentGameState;
     }
