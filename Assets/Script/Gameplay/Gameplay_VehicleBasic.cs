@@ -27,6 +27,7 @@ namespace Gameplay_RoadLogic
         private Vector3 bufferTargetPosition;
 
         private VehicleState currentState;
+        public VehicleState GetCurrentState => currentState;
         public Direction currentDirection;
         
         private Collider2D vehicle_Collider;
@@ -79,10 +80,14 @@ namespace Gameplay_RoadLogic
             {
                 Vector3 boxCenter = vehicle_Collider.bounds.center;
                 Vector3 direction = (currentTrafficLightToStop.StopPosition.position - (Vector3)boxCenter).normalized;
-                Vector3 rayEnd = boxCenter + direction * 0.6f;
+                Vector3 rayEnd = boxCenter + direction * 0.1f;
                 Gizmos.color = Color.yellow;
                 Gizmos.DrawLine(transform.position, rayEnd);
             }
+        }
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            Debug.Log(collision.gameObject.name);
         }
         #endregion
         #region StateLogic
@@ -119,9 +124,9 @@ namespace Gameplay_RoadLogic
             Vector2 boxCenter = vehicle_Collider.bounds.center;
             Vector2 distanceFromVehicle = targetPosition - (Vector3)boxCenter;
             Vector2 direction = distanceFromVehicle.normalized;
-            
+            //Debug.Log(direction);
             bool hitVehicle = false;
-            RaycastHit2D[] hitVehicleDatas = Physics2D.LinecastAll(boxCenter, direction * 0.8f, vehicleMask);
+            RaycastHit2D[] hitVehicleDatas = Physics2D.LinecastAll(boxCenter, boxCenter + direction * 0.35f, vehicleMask);
             foreach(RaycastHit2D hitVehicleData in  hitVehicleDatas)
             {
                 //Debug.Log(hitVehicleData.collider);
@@ -135,7 +140,7 @@ namespace Gameplay_RoadLogic
             if(Vector3.Distance(transform.position, bufferTargetPosition) <= 0.01f)
             {
                 bufferTargetPosition = destinations.Dequeue().worldPosition;
-                Debug.Log("Dequeue more");
+                //Debug.Log("Dequeue more");
             }
             if (Vector2.Distance(transform.position, targetPosition) > 0.01f && !hitVehicle)
             {
@@ -204,7 +209,7 @@ namespace Gameplay_RoadLogic
         private void OnSetCurrentDirection()
         {
             Vector3 calculateDistance = targetPosition - transform.position;
-            Debug.Log(calculateDistance);
+            //Debug.Log(calculateDistance);
             float x = calculateDistance.x;
             float y = calculateDistance.y;
             if (x > 0 && y > 0)

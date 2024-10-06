@@ -27,12 +27,13 @@ namespace GameplayManager
         }
         private void Start()
         {
-            SpawnVehicle();
+
         }
         private void Update()
         {
-            //currentDuration += Time.deltaTime;
             if (Manager_Game.instance.currentGameState != Manager_Game.GameState.Gameplay) return;
+            
+            currentDuration += Time.deltaTime;
             if (currentDuration > currentIntervalToSpawn)
             {
                 currentDuration = 0;
@@ -49,7 +50,7 @@ namespace GameplayManager
             {
                 endNode = List_EdgeNodes[Random.Range(0, List_EdgeNodes.Count)];
             } while (startNode == endNode);
-            int range = Random.Range(1, 1);
+            int range = Random.Range(1, 5);
             StartCoroutine(SpawnVehicleWithCount(startNode.worldPosition, endNode.worldPosition, range));
         }
         private IEnumerator SpawnVehicleWithCount(Vector3 startPos, Vector3 endPos, int maxCount)
