@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 384609862417185803}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.229, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -73,9 +73,9 @@ SpriteRenderer:
   m_SortingLayerID: -1647693283
   m_SortingLayer: 7
   m_SortingOrder: 0
-  m_Sprite: {fileID: -2098076022, guid: 26040b2046d502840a9eface8ed24fe8, type: 3}
+  m_Sprite: {fileID: -55244633, guid: c18db36c1b15c69409aa660d5b557577, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
+  m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 1, y: 1}
@@ -83,7 +83,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
+  m_SpriteSortPoint: 1
 --- !u!1 &1289062465709767326
 GameObject:
   m_ObjectHideFlags: 0
@@ -137,6 +137,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   currentTrafficLightToStop: {fileID: 0}
+  currentDirection: 0
+  UpDirectionSprite: {fileID: -1505337444, guid: c18db36c1b15c69409aa660d5b557577, type: 3}
+  RightDirectionSprite: {fileID: -55244633, guid: c18db36c1b15c69409aa660d5b557577, type: 3}
 --- !u!50 &5509844238995910814
 Rigidbody2D:
   serializedVersion: 4

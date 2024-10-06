@@ -28,12 +28,17 @@ namespace Gameplay_RoadLogic
 
         private VehicleState currentState;
         public Direction currentDirection;
+        
         private Collider2D vehicle_Collider;
+        private SpriteRenderer vehicle_Renderer;
+        [SerializeField] private Sprite UpDirectionSprite, RightDirectionSprite;
+
         #region MONOBEHAVIOUR CALLBACK
         private void Awake()
         {
             destinations = new Queue<Gameplay_RoadNode>();
             vehicle_Collider = GetComponent<Collider2D>();
+            vehicle_Renderer = transform.GetChild(0).GetComponent<SpriteRenderer>();
             currentState = VehicleState.Stop;
         }
         private void Start()
@@ -202,10 +207,31 @@ namespace Gameplay_RoadLogic
             Debug.Log(calculateDistance);
             float x = calculateDistance.x;
             float y = calculateDistance.y;
-            if (x > 0 && y > 0) currentDirection = Direction.Up;
-            else if (x < 0 && y < 0) currentDirection = Direction.Down;
-            else if (x > 0 && y < 0) currentDirection = Direction.Right;
-            else if (x < 0 && y > 0) currentDirection = Direction.Left;
+            if (x > 0 && y > 0)
+            {
+                currentDirection = Direction.Up;
+                vehicle_Renderer.sprite = UpDirectionSprite;
+                vehicle_Renderer.flipX = false;
+            }
+            else if (x < 0 && y < 0)
+            {
+                currentDirection = Direction.Down;
+                vehicle_Renderer.sprite = RightDirectionSprite;
+                vehicle_Renderer.flipX = true;
+            }
+            else if (x > 0 && y < 0)
+            {
+                currentDirection = Direction.Right;
+                vehicle_Renderer.sprite = RightDirectionSprite;
+                vehicle_Renderer.flipX = false;
+            }
+            else if (x < 0 && y > 0)
+            {
+                currentDirection = Direction.Left;
+                vehicle_Renderer.sprite = UpDirectionSprite;
+                vehicle_Renderer.flipX = true;
+                
+            }
         }
         #endregion
     }
