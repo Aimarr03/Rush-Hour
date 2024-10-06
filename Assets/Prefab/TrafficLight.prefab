@@ -73,7 +73,7 @@ SpriteRenderer:
   m_SortingLayerID: -1881732257
   m_SortingLayer: 8
   m_SortingOrder: 10
-  m_Sprite: {fileID: 1179888947, guid: 26040b2046d502840a9eface8ed24fe8, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f7e477cbdd41b5940b1adc9b29ce2e3b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -134,6 +134,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Current_TrafficState: 0
+  targetDirection: 0
   Current_LightState: 0
   AreaDetection: {fileID: 2258642349399497414}
   visualIndicator: {fileID: 8303820222279285240}
