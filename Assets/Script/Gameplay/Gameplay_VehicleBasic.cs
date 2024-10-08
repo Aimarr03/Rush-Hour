@@ -1,4 +1,5 @@
 using GameplayManager;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -31,6 +32,7 @@ namespace Gameplay_RoadLogic
         private Vector3 bufferTargetPosition;
 
         private VehicleState currentState;
+        private Gameplay_VehicleBasic frontVehicle;
         public VehicleState GetCurrentState => currentState;
         public Direction currentDirection;
         public MovingState currentMovingState;
@@ -38,6 +40,10 @@ namespace Gameplay_RoadLogic
         private Collider2D vehicle_Collider;
         private SpriteRenderer vehicle_Renderer;
         [SerializeField] private Sprite UpDirectionSprite, RightDirectionSprite;
+        [SerializeField] private int score;
+        
+        public static event Action<Gameplay_VehicleBasic,int> OnReachGoal;
+        public static event Action<Vector3> OnCrash;
 
         #region MONOBEHAVIOUR CALLBACK
         private void Awake()
@@ -57,7 +63,6 @@ namespace Gameplay_RoadLogic
             this.destinations = new Queue<Gameplay_RoadNode>(destinations);
             movementSpeed = speed;
 
-            //Debug.Log(destinations.Count);
             targetPosition = this.destinations.Dequeue().worldPosition;
             currentState = VehicleState.Move;
             OnSetCurrentDirection();
@@ -65,6 +70,7 @@ namespace Gameplay_RoadLogic
         void Update()
         {
             if (Manager_Game.instance.currentGameState != Manager_Game.GameState.Gameplay) return;
+            if (Manager_Gameplay.instance.currentGameplayState != Manager_Game.GameplayState.Neutral) return;
             switch (currentState)
             {
                 case VehicleState.Stop:
@@ -94,9 +100,10 @@ namespace Gameplay_RoadLogic
         {
             if(collision.TryGetComponent(out Gameplay_VehicleBasic vehicle))
             {
-                if(vehicle.currentMovingState != currentMovingState && vehicle.currentState == VehicleState.Move && currentState == VehicleState.Move)
+                if(vehicle.currentMovingState != currentMovingState && vehicle.currentState == VehicleState.Move && currentState == VehicleState.Move && vehicle != frontVehicle)
                 {
-                    Debug.Log("Crash!");
+                    Manager_Gameplay.instance.SetGameplayState(Manager_Game.GameplayState.Lose);
+                    OnCrash?.Invoke(transform.position);
                 }
             }
         }
@@ -137,22 +144,20 @@ namespace Gameplay_RoadLogic
             Vector2 direction = distanceFromVehicle.normalized;
             //Debug.Log(direction);
             bool hitVehicle = false;
-            RaycastHit2D[] hitVehicleDatas = Physics2D.LinecastAll(boxCenter, boxCenter + direction * 0.15f, vehicleMask);
-            foreach(RaycastHit2D hitVehicleData in  hitVehicleDatas)
+            RaycastHit2D[] hitVehicleDatas = Physics2D.LinecastAll(boxCenter, boxCenter + direction * 0.35f, vehicleMask);
+            foreach(RaycastHit2D RayCastHitVehicle in  hitVehicleDatas)
             {
-                //Debug.Log(hitVehicleData.collider);
-                if(hitVehicleData.collider.gameObject != gameObject)
+                Gameplay_VehicleBasic hitVehicleData =  RayCastHitVehicle.collider.gameObject.GetComponent<Gameplay_VehicleBasic>();
+                if(hitVehicleData.gameObject != gameObject)
                 {
+                    if (hitVehicleData.currentDirection != currentDirection) continue;
                     hitVehicle = true;
+                    frontVehicle = hitVehicleData;
                     break;
                 }
             }
           
-            if(Vector3.Distance(transform.position, bufferTargetPosition) <= 0.01f)
-            {
-                bufferTargetPosition = destinations.Dequeue().worldPosition;
-                //Debug.Log("Dequeue more");
-            }
+            
             if (Vector2.Distance(transform.position, targetPosition) > 0.01f && !hitVehicle)
             {
                 transform.position = Vector2.MoveTowards(transform.position, targetPosition, movementSpeed * Time.deltaTime);
@@ -161,13 +166,21 @@ namespace Gameplay_RoadLogic
             {
                 currentState = VehicleState.Stop;
             }
+            if (Vector3.Distance(transform.position, bufferTargetPosition) <= 0.01f)
+            {
+                bufferTargetPosition = destinations.Dequeue().worldPosition;
+                //Debug.Log($"{destinations.Count} remaining");
+                //Debug.Log("Dequeue more");
+            }
         }
         private void CheckBufferPositionAgain()
         {   
             Vector3 direction = targetPosition - transform.position;
+            Debug.Log($"{gameObject.name} + {direction}");
             bool shouldIterate = calculateDirectionToReiterate(direction);
             while(shouldIterate)
             {
+                //Debug.Log($"{destinations.Count} remaining");
                 targetPosition = destinations.Dequeue().worldPosition;
                 direction = targetPosition - transform.position;
                 shouldIterate = calculateDirectionToReiterate(direction);
@@ -214,13 +227,13 @@ namespace Gameplay_RoadLogic
                 else
                 {
                     currentState = VehicleState.Reach;
+                    OnReachGoal?.Invoke(this, score);
                 }
             }
         }
         private void OnSetCurrentDirection()
         {
             Vector3 calculateDistance = targetPosition - transform.position;
-            //Debug.Log(calculateDistance);
             float x = calculateDistance.x;
             float y = calculateDistance.y;
             if (x > 0 && y > 0)
@@ -229,6 +242,7 @@ namespace Gameplay_RoadLogic
                 currentMovingState = MovingState.Vertical;
                 vehicle_Renderer.sprite = UpDirectionSprite;
                 vehicle_Renderer.flipX = false;
+                targetPosition += new Vector3(-0.175f, 0);
             }
             else if (x < 0 && y < 0)
             {
@@ -236,6 +250,7 @@ namespace Gameplay_RoadLogic
                 currentMovingState = MovingState.Vertical;
                 vehicle_Renderer.sprite = RightDirectionSprite;
                 vehicle_Renderer.flipX = true;
+                targetPosition += new Vector3(0.175f, 0);
             }
             else if (x > 0 && y < 0)
             {
@@ -243,6 +258,7 @@ namespace Gameplay_RoadLogic
                 currentMovingState = MovingState.Horizontal;
                 vehicle_Renderer.sprite = RightDirectionSprite;
                 vehicle_Renderer.flipX = false;
+                targetPosition += new Vector3(0, 0.175f);
             }
             else if (x < 0 && y > 0)
             {
@@ -250,7 +266,7 @@ namespace Gameplay_RoadLogic
                 currentMovingState = MovingState.Horizontal;
                 vehicle_Renderer.sprite = UpDirectionSprite;
                 vehicle_Renderer.flipX = true;
-                
+
             }
         }
         #endregion

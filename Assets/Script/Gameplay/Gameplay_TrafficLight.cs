@@ -44,7 +44,14 @@ namespace Gameplay_RoadLogic
             ListVehicle = new List<Gameplay_VehicleBasic>();
             SetTrafficState(LightState.Red);
         }
-
+        private void Start()
+        {
+            Gameplay_VehicleBasic.OnReachGoal += Gameplay_VehicleBasic_OnReachGoal;
+        }
+        private void OnDisable()
+        {
+            Gameplay_VehicleBasic.OnReachGoal -= Gameplay_VehicleBasic_OnReachGoal;
+        }
         private void Update()
         {
             switch (Current_TrafficState)
@@ -79,6 +86,10 @@ namespace Gameplay_RoadLogic
             {
                 ListVehicle.Remove(vehicleBasic);
             }
+        }
+        private void Gameplay_VehicleBasic_OnReachGoal(Gameplay_VehicleBasic vehicle, int obj)
+        {
+            if (ListVehicle.Contains(vehicle)) ListVehicle.Remove(vehicle);
         }
         #region Traffic State Logic
         public void SetTrafficState(LightState lightState)

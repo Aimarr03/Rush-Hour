@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71b4da42ea3e94d408d1a2cce0440102, type: 3}
   m_Name: Level 0
   m_EditorClassIdentifier: 
-  intervalSpawn: 3
+  MinDurationSpawn: 3
+  MaxDurationToSpawn: 3
+  IntervalSpawn: 1.25
   minQuantity: 1
   maxQuantity: 3
-  minSpeed: 0.45
-  maxSpeed: 0.5
+  minSpeed: 0.75
+  maxSpeed: 0.9
   rushHourMultiplier: 1.05

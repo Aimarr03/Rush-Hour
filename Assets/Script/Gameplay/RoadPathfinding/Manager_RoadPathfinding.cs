@@ -114,7 +114,7 @@ namespace Gameplay_RoadLogic
             {
                 foreach(Gameplay_RoadNode CurrentDirection_RoadNode in gameplay_RoadNode.AdjacentConnectedNodes)
                 {
-                    Debug.Log($"Start Position of Edge grid position {CurrentDirection_RoadNode.gridPosition} world position {CurrentDirection_RoadNode.worldPosition}");
+                    //Debug.Log($"Start Position of Edge grid position {CurrentDirection_RoadNode.gridPosition} world position {CurrentDirection_RoadNode.worldPosition}");
                     /*Debug.Log($"Center Position is grid position {gameplay_RoadNode.gridPosition} world position {gameplay_RoadNode.worldPosition}");*/
                     Vector3Int CurrentDirection = CurrentDirection_RoadNode.gridPosition - gameplay_RoadNode.gridPosition;
                     /*Debug.Log($"Current Direction is {CurrentDirection}"); */
@@ -124,7 +124,7 @@ namespace Gameplay_RoadLogic
                     do
                     {
                         Vector3Int NextPosition = CurrentDirection_RoadNode.gridPosition + (CurrentDirection * multiplier);
-                        Debug.Log($"Next Position is {NextPosition}");
+                        //Debug.Log($"Next Position is {NextPosition}");
                         NextNode = allTiles[NextPosition];
                         
                         multiplier++;
@@ -207,7 +207,7 @@ namespace Gameplay_RoadLogic
                     break;
             }
             node.connectedNodeCount = connectedNode;
-            Debug.Log($"Node For Grid Pos {node.gridPosition} World Pos {node.worldPosition} is a {node.roadType} with {connectedNode} connected nodes");
+            //Debug.Log($"Node For Grid Pos {node.gridPosition} World Pos {node.worldPosition} is a {node.roadType} with {connectedNode} connected nodes");
         }
         #endregion
         #region PathFinding Algorithm

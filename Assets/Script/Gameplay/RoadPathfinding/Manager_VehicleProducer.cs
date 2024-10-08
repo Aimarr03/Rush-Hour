@@ -35,6 +35,7 @@ namespace GameplayManager
         private void Update()
         {
             if (Manager_Game.instance.currentGameState != Manager_Game.GameState.Gameplay) return;
+            if (Manager_Gameplay.instance.currentGameplayState != Manager_Game.GameplayState.Neutral) return;
             
             currentDuration += Time.deltaTime;
             if (currentDuration > currentIntervalToSpawn)

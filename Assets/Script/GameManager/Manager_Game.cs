@@ -14,11 +14,17 @@ namespace GameplayManager
 
         public static Manager_Game instance;
         public GameState currentGameState { get; private set; }
+
+        
         public enum GameState
         {
             UI,
             Gameplay,
-            Dialogue
+            Dialogue,
+        }
+        public enum GameplayState
+        {
+            Win, Neutral, Lose
         }
 
 
