@@ -132,12 +132,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1bd4be47072eba149aadfd8b50dc1c63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 5
+  movementSpeed: 3
   vehicleMask:
     serializedVersion: 2
     m_Bits: 64
   currentTrafficLightToStop: {fileID: 0}
   currentDirection: 0
+  currentMovingState: 0
   UpDirectionSprite: {fileID: -1505337444, guid: c18db36c1b15c69409aa660d5b557577, type: 3}
   RightDirectionSprite: {fileID: -55244633, guid: c18db36c1b15c69409aa660d5b557577, type: 3}
 --- !u!50 &5509844238995910814

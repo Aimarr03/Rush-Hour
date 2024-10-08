@@ -9,6 +9,9 @@ namespace GameplayManager
     public class Manager_VehicleProducer : MonoBehaviour
     {
         [SerializeField] private Gameplay_VehicleBasic basicCar;
+
+        public SO_Level level_data;
+
         Manager_RoadPathfinding roadPathfinding;
         List<Gameplay_RoadNode> List_EdgeNodes => roadPathfinding.EdgeTilesList;
 
@@ -27,7 +30,7 @@ namespace GameplayManager
         }
         private void Start()
         {
-
+            SetLevelData(level_data);
         }
         private void Update()
         {
@@ -41,6 +44,13 @@ namespace GameplayManager
                 SpawnVehicle();
             }
         }
+        public void SetLevelData(SO_Level level)
+        {
+            level_data = level;
+            minDuration = level_data.MinDurationSpawn;
+            maxDuration = level_data.MaxDurationToSpawn;
+            intervalSpawnVehicle = level_data.IntervalSpawn;
+        }
 
         private void SpawnVehicle()
         {
@@ -50,7 +60,7 @@ namespace GameplayManager
             {
                 endNode = List_EdgeNodes[Random.Range(0, List_EdgeNodes.Count)];
             } while (startNode == endNode);
-            int range = Random.Range(1, 5);
+            int range = Random.Range(level_data.minQuantity, level_data.maxQuantity);
             StartCoroutine(SpawnVehicleWithCount(startNode.worldPosition, endNode.worldPosition, range));
         }
         private IEnumerator SpawnVehicleWithCount(Vector3 startPos, Vector3 endPos, int maxCount)
@@ -60,7 +70,7 @@ namespace GameplayManager
             {
                 Gameplay_VehicleBasic newCar = Instantiate(basicCar);
                 newCar.transform.position = startPos;
-                newCar.SetUpDestination(destinations, 1.5f);
+                newCar.SetUpDestination(destinations, Random.Range(level_data.minSpeed, level_data.maxSpeed));
                 yield return new WaitForSeconds(intervalSpawnVehicle);
             }
             yield return null;

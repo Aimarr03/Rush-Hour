@@ -12,6 +12,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: TrafficLight For Down Road
       objectReference: {fileID: 0}
+    - target: {fileID: 376872869757858242, guid: 32cccb4e93cd5804a81177edfe046303, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 376872869757858242, guid: 32cccb4e93cd5804a81177edfe046303, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 376872869757858242, guid: 32cccb4e93cd5804a81177edfe046303, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 376872869757858242, guid: 32cccb4e93cd5804a81177edfe046303, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.178
+      objectReference: {fileID: 0}
     - target: {fileID: 1845318716165873382, guid: 32cccb4e93cd5804a81177edfe046303, type: 3}
       propertyPath: targetDirection
       value: 3
@@ -134,7 +150,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8303820222279285240, guid: 32cccb4e93cd5804a81177edfe046303, type: 3}
       propertyPath: m_FlipX
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

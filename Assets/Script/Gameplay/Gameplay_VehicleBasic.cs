@@ -18,7 +18,11 @@ namespace Gameplay_RoadLogic
         {
             Up, Left, Right, Down
         }
-        [SerializeField, Range(5, 12)] private float movementSpeed;
+        public enum MovingState
+        {
+            Horizontal, Vertical
+        }
+        [SerializeField, Range(0, 3)] private float movementSpeed;
         [SerializeField] LayerMask vehicleMask;
         private Queue<Gameplay_RoadNode> destinations;
         private Vector3 targetPosition;
@@ -29,6 +33,7 @@ namespace Gameplay_RoadLogic
         private VehicleState currentState;
         public VehicleState GetCurrentState => currentState;
         public Direction currentDirection;
+        public MovingState currentMovingState;
         
         private Collider2D vehicle_Collider;
         private SpriteRenderer vehicle_Renderer;
@@ -87,7 +92,13 @@ namespace Gameplay_RoadLogic
         }
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            Debug.Log(collision.gameObject.name);
+            if(collision.TryGetComponent(out Gameplay_VehicleBasic vehicle))
+            {
+                if(vehicle.currentMovingState != currentMovingState && vehicle.currentState == VehicleState.Move && currentState == VehicleState.Move)
+                {
+                    Debug.Log("Crash!");
+                }
+            }
         }
         #endregion
         #region StateLogic
@@ -126,7 +137,7 @@ namespace Gameplay_RoadLogic
             Vector2 direction = distanceFromVehicle.normalized;
             //Debug.Log(direction);
             bool hitVehicle = false;
-            RaycastHit2D[] hitVehicleDatas = Physics2D.LinecastAll(boxCenter, boxCenter + direction * 0.35f, vehicleMask);
+            RaycastHit2D[] hitVehicleDatas = Physics2D.LinecastAll(boxCenter, boxCenter + direction * 0.15f, vehicleMask);
             foreach(RaycastHit2D hitVehicleData in  hitVehicleDatas)
             {
                 //Debug.Log(hitVehicleData.collider);
@@ -215,24 +226,28 @@ namespace Gameplay_RoadLogic
             if (x > 0 && y > 0)
             {
                 currentDirection = Direction.Up;
+                currentMovingState = MovingState.Vertical;
                 vehicle_Renderer.sprite = UpDirectionSprite;
                 vehicle_Renderer.flipX = false;
             }
             else if (x < 0 && y < 0)
             {
                 currentDirection = Direction.Down;
+                currentMovingState = MovingState.Vertical;
                 vehicle_Renderer.sprite = RightDirectionSprite;
                 vehicle_Renderer.flipX = true;
             }
             else if (x > 0 && y < 0)
             {
                 currentDirection = Direction.Right;
+                currentMovingState = MovingState.Horizontal;
                 vehicle_Renderer.sprite = RightDirectionSprite;
                 vehicle_Renderer.flipX = false;
             }
             else if (x < 0 && y > 0)
             {
                 currentDirection = Direction.Left;
+                currentMovingState = MovingState.Horizontal;
                 vehicle_Renderer.sprite = UpDirectionSprite;
                 vehicle_Renderer.flipX = true;
                 

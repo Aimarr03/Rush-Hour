@@ -16,7 +16,7 @@ namespace GameplayManager
         private Gameplay_TrafficLight currentTrafficLight;
         private int index = 0;
         private int maxIndex => trafficLights.Count;
-        
+
         private void Awake()
         {
             trafficLights = FindObjectsOfType<Gameplay_TrafficLight>().ToList();

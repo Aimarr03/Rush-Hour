@@ -8,6 +8,10 @@ namespace GameplayManager
     public class Manager_Game : MonoBehaviour
     {
         public event Action<GameState> OnChangeGameState;
+
+        public string LevelName = "Level 0";
+        public List<SO_Level> LevelList;
+
         public static Manager_Game instance;
         public GameState currentGameState { get; private set; }
         public enum GameState
