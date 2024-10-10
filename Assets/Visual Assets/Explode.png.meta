@@ -43,12 +43,12 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 450
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -108,7 +108,133 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: Explode_2
+      rect:
+        serializedVersion: 2
+        x: 2480
+        y: 479
+        width: 1395
+        height: 1306
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1c61de353e0e4404c9836352513dc508
+      internalID: -1726933033
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Explode_3
+      rect:
+        serializedVersion: 2
+        x: 4186
+        y: 21
+        width: 1989
+        height: 1990
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d60a1fb5c3c052947afab97a74381948
+      internalID: -595413031
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Explode_4
+      rect:
+        serializedVersion: 2
+        x: 6608
+        y: 549
+        width: 1002
+        height: 966
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 37040fac8339eff4999171bb852271ec
+      internalID: 1121649194
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Explode_
+      rect:
+        serializedVersion: 2
+        x: 709
+        y: 783
+        width: 450
+        height: 468
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3e070036c8defde4a809970298f5412d
+      internalID: 170686536
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Explode_1
+      rect:
+        serializedVersion: 2
+        x: 1490
+        y: 594
+        width: 804
+        height: 776
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f5e489d33a118cb49b301dfa4c170c39
+      internalID: 527484593
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Explode_5
+      rect:
+        serializedVersion: 2
+        x: 8032
+        y: 603
+        width: 821
+        height: 896
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 343aac451fa110242a1e321125164352
+      internalID: 2017132510
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -119,7 +245,35 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Explode_: 170686536
+      Explode_1: 527484593
+      Explode_10: -677593877
+      Explode_13: -370440708
+      Explode_14: -311551635
+      Explode_15: -32714524
+      Explode_16: 1204883479
+      Explode_17: 1861735804
+      Explode_18: 130182789
+      Explode_19: -1493227328
+      Explode_2: -1726933033
+      Explode_20: 464483228
+      Explode_21: 962931757
+      Explode_22: -158994179
+      Explode_23: -520945968
+      Explode_24: 1614374227
+      Explode_25: -700227754
+      Explode_27: -1778465520
+      Explode_28: 1375546744
+      Explode_29: 195806570
+      Explode_3: -595413031
+      Explode_30: 1297604888
+      Explode_31: 355186590
+      Explode_4: 1121649194
+      Explode_5: 2017132510
+      Explode_6: 157761951
+      Explode_7: 1828137422
+      Explode_8: 954911743
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

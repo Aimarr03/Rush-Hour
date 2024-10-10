@@ -30,6 +30,7 @@ namespace Gameplay_RoadLogic
 
         public Gameplay_TrafficLight currentTrafficLightToStop;
         private Vector3 bufferTargetPosition;
+        private Vector2 directionDetection;
 
         private VehicleState currentState;
         private Gameplay_VehicleBasic frontVehicle;
@@ -39,6 +40,8 @@ namespace Gameplay_RoadLogic
         
         private Collider2D vehicle_Collider;
         private SpriteRenderer vehicle_Renderer;
+        private Animator vehicle_Animator;
+
         [SerializeField] private Sprite UpDirectionSprite, RightDirectionSprite;
         [SerializeField] private int score;
         
@@ -50,6 +53,7 @@ namespace Gameplay_RoadLogic
         {
             destinations = new Queue<Gameplay_RoadNode>();
             vehicle_Collider = GetComponent<Collider2D>();
+            vehicle_Animator = GetComponent<Animator>();
             vehicle_Renderer = transform.GetChild(0).GetComponent<SpriteRenderer>();
             currentState = VehicleState.Stop;
         }
@@ -79,6 +83,7 @@ namespace Gameplay_RoadLogic
                     HandleTrafficStopLogic();
                     break;
                 case VehicleState.Move:
+                    CheckCrash();
                     HandleMovementLogic();
                     break;
                 case VehicleState.Reach:
@@ -90,10 +95,14 @@ namespace Gameplay_RoadLogic
             if (currentState == VehicleState.TrafficLightStop || currentState == VehicleState.Stop && currentTrafficLightToStop != null)
             {
                 Vector3 boxCenter = vehicle_Collider.bounds.center;
-                Vector3 direction = (currentTrafficLightToStop.StopPosition.position - (Vector3)boxCenter).normalized;
-                Vector3 rayEnd = boxCenter + direction * 0.1f;
+                Vector3 rayEnd = boxCenter + (Vector3)directionDetection * 0.1f;
                 Gizmos.color = Color.yellow;
                 Gizmos.DrawLine(transform.position, rayEnd);
+            }
+            else if(currentState == VehicleState.Move)
+            {
+                Vector2 boxCenter = vehicle_Collider.bounds.center;
+                Gizmos.DrawLine(transform.position, boxCenter + directionDetection * 0.35f);
             }
         }
         private void OnTriggerEnter2D(Collider2D collision)
@@ -103,7 +112,9 @@ namespace Gameplay_RoadLogic
                 if(vehicle.currentMovingState != currentMovingState && vehicle.currentState == VehicleState.Move && currentState == VehicleState.Move && vehicle != frontVehicle)
                 {
                     Manager_Gameplay.instance.SetGameplayState(Manager_Game.GameplayState.Lose);
+                    Debug.Log($"Lose {gameObject.name} {transform.position} => {vehicle.gameObject.name} {vehicle.transform.position}");
                     OnCrash?.Invoke(transform.position);
+                    vehicle_Animator.SetTrigger("Crash");
                 }
             }
         }
@@ -140,11 +151,9 @@ namespace Gameplay_RoadLogic
         private void HandleTrafficStopLogic()
         {
             Vector2 boxCenter = vehicle_Collider.bounds.center;
-            Vector2 distanceFromVehicle = targetPosition - (Vector3)boxCenter;
-            Vector2 direction = distanceFromVehicle.normalized;
             //Debug.Log(direction);
             bool hitVehicle = false;
-            RaycastHit2D[] hitVehicleDatas = Physics2D.LinecastAll(boxCenter, boxCenter + direction * 0.35f, vehicleMask);
+            RaycastHit2D[] hitVehicleDatas = Physics2D.LinecastAll(boxCenter, boxCenter + directionDetection * 0.35f, vehicleMask);
             foreach(RaycastHit2D RayCastHitVehicle in  hitVehicleDatas)
             {
                 Gameplay_VehicleBasic hitVehicleData =  RayCastHitVehicle.collider.gameObject.GetComponent<Gameplay_VehicleBasic>();
@@ -209,6 +218,27 @@ namespace Gameplay_RoadLogic
         }
         #endregion
         #region MoveLogic
+        private void CheckCrash()
+        {
+            Vector2 boxCenter = vehicle_Collider.bounds.center;
+            //Debug.Log(direction);
+            RaycastHit2D[] hitVehicleDatas = Physics2D.LinecastAll(boxCenter, boxCenter + directionDetection * 0.35f, vehicleMask);
+            foreach (RaycastHit2D RayCastHitVehicle in hitVehicleDatas)
+            {
+                Gameplay_VehicleBasic vehicle = RayCastHitVehicle.collider.gameObject.GetComponent<Gameplay_VehicleBasic>();
+                if (vehicle.gameObject != gameObject)
+                {
+                    if (vehicle.currentMovingState != currentMovingState && vehicle.currentState == VehicleState.Move && currentState == VehicleState.Move && vehicle != frontVehicle)
+                    {
+                        Manager_Gameplay.instance.SetGameplayState(Manager_Game.GameplayState.Lose);
+                        Debug.Log($"Lose {gameObject.name} {transform.position}");
+                        OnCrash?.Invoke(transform.position);
+                        vehicle_Animator.SetTrigger("Crash");
+                        break;
+                    }
+                }
+            }
+        }
         private void HandleMovementLogic()
         {
             if(Vector2.Distance(transform.position, targetPosition) > 0.01f)
@@ -234,6 +264,7 @@ namespace Gameplay_RoadLogic
         private void OnSetCurrentDirection()
         {
             Vector3 calculateDistance = targetPosition - transform.position;
+            directionDetection = new Vector2(calculateDistance.x, calculateDistance.y/2);
             float x = calculateDistance.x;
             float y = calculateDistance.y;
             if (x > 0 && y > 0)
@@ -264,6 +295,7 @@ namespace Gameplay_RoadLogic
             {
                 currentDirection = Direction.Left;
                 currentMovingState = MovingState.Horizontal;
+                targetPosition += new Vector3(0, -0.175f);
                 vehicle_Renderer.sprite = UpDirectionSprite;
                 vehicle_Renderer.flipX = true;
 
