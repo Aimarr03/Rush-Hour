@@ -70,11 +70,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2348970742338607082, guid: 32cccb4e93cd5804a81177edfe046303, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2348970742338607082, guid: 32cccb4e93cd5804a81177edfe046303, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4591820383252570017, guid: 32cccb4e93cd5804a81177edfe046303, type: 3}
       propertyPath: m_LocalPosition.x
@@ -86,11 +86,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6716811402207441191, guid: 32cccb4e93cd5804a81177edfe046303, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.995145
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6716811402207441191, guid: 32cccb4e93cd5804a81177edfe046303, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.5166779
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6716811402207441191, guid: 32cccb4e93cd5804a81177edfe046303, type: 3}
       propertyPath: m_LocalPosition.z
@@ -102,15 +102,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6716811402207441191, guid: 32cccb4e93cd5804a81177edfe046303, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6716811402207441191, guid: 32cccb4e93cd5804a81177edfe046303, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6716811402207441191, guid: 32cccb4e93cd5804a81177edfe046303, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6716811402207441191, guid: 32cccb4e93cd5804a81177edfe046303, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -126,11 +126,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8988564076684455387, guid: 32cccb4e93cd5804a81177edfe046303, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.53
+      value: -0.583
       objectReference: {fileID: 0}
     - target: {fileID: 8988564076684455387, guid: 32cccb4e93cd5804a81177edfe046303, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.85
+      value: -0.669
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
