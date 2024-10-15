@@ -56,11 +56,14 @@ namespace Gameplay_RoadLogic
             List<Gameplay_RoadNode> destinations = Manager_RoadPathfinding.instance.SetPathFromWorldPosition(transform.position, targetPosition);
             while (currentQuantity < maxQuantity)
             {
-                Gameplay_VehicleBasic vehicleBasic = Instantiate(Manager_VehicleProducer.Instance.basicCar, transform.position, Quaternion.identity);
+                Gameplay_VehicleBasic vehicleBasic = Manager_VehicleProducer.Instance.GetVehicle();
                 vehicleBasic.transform.position = transform.position;
-                vehicleBasic.SetUpDestination(destinations, Random.Range(Manager_VehicleProducer.Instance.level_data.minSpeed, Manager_VehicleProducer.Instance.level_data.maxSpeed));
+                vehicleBasic.transform.rotation = Quaternion.identity;
+                vehicleBasic.transform.position = transform.position;
+                vehicleBasic.gameObject.SetActive(true);
+                vehicleBasic.SetUpDestination(destinations, Random.Range(Manager_VehicleProducer.Instance.level_data.minSpeed, Manager_VehicleProducer.Instance.level_data.minSpeed));
                 currentQuantity++;
-                yield return new WaitForSeconds(0.85f);
+                yield return new WaitForSeconds(1.0f);
             }
 
         }

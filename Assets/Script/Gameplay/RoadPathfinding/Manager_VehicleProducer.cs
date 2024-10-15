@@ -12,6 +12,8 @@ namespace GameplayManager
         public Gameplay_RoadVehicleSpawner roadVehicleSpawner;
 
         public SO_Level level_data;
+        public Transform VehicleContainer;
+        public Queue<Gameplay_VehicleBasic> Queue_BasicVehicle;
 
         Manager_RoadPathfinding roadPathfinding;
         List<Gameplay_RoadNode> List_EdgeNodes => roadPathfinding.EdgeTilesList;
@@ -37,6 +39,15 @@ namespace GameplayManager
             else
             {
                 Destroy(gameObject);
+            }
+            Queue_BasicVehicle = new Queue<Gameplay_VehicleBasic>();
+            for(int index = 0; index < 30; index++)
+            {
+                Gameplay_VehicleBasic vehicle = Instantiate(basicCar, VehicleContainer);
+                vehicle.gameObject.name = $"Vehicle {index}";
+                vehicle.transform.parent = VehicleContainer;
+                vehicle.gameObject.SetActive(false);
+                Queue_BasicVehicle.Enqueue(vehicle);
             }
             roadPathfinding = GetComponent<Manager_RoadPathfinding>();
             currentDuration = 0;
@@ -79,6 +90,26 @@ namespace GameplayManager
             
             targetPosition = endNode.worldPosition;
             
+        }
+        public void AddVehicle(Gameplay_VehicleBasic vehicle)
+        {
+            vehicle.gameObject.SetActive(false);
+            Queue_BasicVehicle.Enqueue(vehicle);
+        }
+        public Gameplay_VehicleBasic GetVehicle()
+        {
+            if(Queue_BasicVehicle.Count == 0)
+            {
+                Gameplay_VehicleBasic basicVehicle =  Instantiate(basicCar);
+                basicVehicle.transform.position = transform.position;
+                basicVehicle.transform.rotation = Quaternion.identity;
+                return basicVehicle;
+            }
+            else
+            {
+                Gameplay_VehicleBasic basicVehicle = Queue_BasicVehicle.Dequeue();
+                return basicVehicle;
+            }
         }
         /*private IEnumerator SpawnVehicleWithCount(Vector3 startPos, Vector3 endPos, int maxCount)
         {

@@ -14,8 +14,8 @@ namespace Gameplay_RoadLogic
 
         private float currentDuration = 0;
         private float maxBufferDuration = 0;
-        private float intervalSwitch = 0.5f;
-        private float intervalHold = 1.5f;
+        private float intervalSwitch = 0.25f;
+        private float intervalHold = .75f;
 
         [SerializeField] private Collider2D AreaDetection;
 
