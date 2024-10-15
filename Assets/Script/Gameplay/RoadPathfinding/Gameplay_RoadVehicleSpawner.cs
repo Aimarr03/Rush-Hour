@@ -9,14 +9,20 @@ namespace Gameplay_RoadLogic
     public class Gameplay_RoadVehicleSpawner : MonoBehaviour
     {
         VehicleSpawnerData data;
+
+        private float currentDurationToSpawn;
         public struct VehicleSpawnerData
         {
-            public float intervalSpawner;
+            public float minSpawnDuration;
+            public float maxSpawnDuration;
+
+            public float GetSpawnDuration => Random.Range(minSpawnDuration, maxSpawnDuration);
             public int minSpawnVehicle;
             public int maxSpawnVehicle;
-            public VehicleSpawnerData(float intervalSpawner, int minSpawnVehicle, int maxSpawnVehicle)
+            public VehicleSpawnerData(float minSpawnDuration, float maxSpawnDuration, int minSpawnVehicle, int maxSpawnVehicle)
             {
-                this.intervalSpawner = intervalSpawner;
+                this.minSpawnDuration = minSpawnDuration;
+                this.maxSpawnDuration = maxSpawnDuration;
                 this.minSpawnVehicle = minSpawnVehicle; 
                 this.maxSpawnVehicle = maxSpawnVehicle;
             }
@@ -25,6 +31,7 @@ namespace Gameplay_RoadLogic
         public void SetUpData(VehicleSpawnerData data)
         {
             this.data = data;
+            currentDurationToSpawn = data.GetSpawnDuration;
         }
         private void Update()
         {
@@ -32,11 +39,13 @@ namespace Gameplay_RoadLogic
             if (Manager_Gameplay.instance.currentGameplayState != Manager_Game.GameplayState.Neutral) return;
             
             currentSpawnDuration += Time.deltaTime;
-            if(currentSpawnDuration > data.intervalSpawner)
+            if(currentSpawnDuration > currentDurationToSpawn)
             {
                 currentSpawnDuration = 0;
+                currentDurationToSpawn = data.GetSpawnDuration;
                 Manager_VehicleProducer.Instance.SetData(transform.position,out Vector3 targetPosition);
                 int RandomizeQuantity = Random.Range(data.minSpawnVehicle, data.maxSpawnVehicle);
+                Debug.Log($"Spawn {RandomizeQuantity}");
                 StartCoroutine(StartSpawning(RandomizeQuantity, targetPosition));
             }
         }
@@ -49,6 +58,7 @@ namespace Gameplay_RoadLogic
                 Gameplay_VehicleBasic vehicleBasic = Instantiate(Manager_VehicleProducer.Instance.basicCar, transform.position, Quaternion.identity);
                 vehicleBasic.transform.position = transform.position;
                 vehicleBasic.SetUpDestination(destinations, Random.Range(Manager_VehicleProducer.Instance.level_data.minSpeed, Manager_VehicleProducer.Instance.level_data.maxSpeed));
+                currentQuantity++;
                 yield return new WaitForSeconds(0.35f);
             }
 

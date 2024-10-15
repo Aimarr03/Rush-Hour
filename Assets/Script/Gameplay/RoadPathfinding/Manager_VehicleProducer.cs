@@ -57,7 +57,8 @@ namespace GameplayManager
             foreach(Gameplay_RoadNode roadNode in List_EdgeNodes)
             {
                 Gameplay_RoadVehicleSpawner vehicleSpawner = Instantiate(roadVehicleSpawner, roadNode.worldPosition, Quaternion.identity);
-                vehicleSpawner.SetUpData(new Gameplay_RoadVehicleSpawner.VehicleSpawnerData(level_data.IntervalSpawn,level_data.minQuantity, level_data.maxQuantity));
+                vehicleSpawner.transform.parent = Manager_Gameplay.instance.transform;
+                vehicleSpawner.SetUpData(new Gameplay_RoadVehicleSpawner.VehicleSpawnerData(level_data.MinDurationSpawn, level_data.MaxDurationToSpawn,level_data.minQuantity, level_data.maxQuantity));
             }
         }
 

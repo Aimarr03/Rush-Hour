@@ -4,8 +4,8 @@ using UnityEngine;
 public class SO_Level : ScriptableObject
 {
     [Header("Spawning")]
-    public float MinDurationSpawn = 3f;
-    public float MaxDurationToSpawn = 3f;
+    public float MinDurationSpawn = 1f;
+    public float MaxDurationToSpawn = 4f;
     public float IntervalSpawn = 1.25f;
     public int minQuantity = 1;
     public int maxQuantity = 3;
