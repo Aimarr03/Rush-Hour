@@ -26,15 +26,23 @@ namespace Gameplay_RoadLogic
 
         private Gameplay_RoadNode startNode, endNode;
 
-        public static Manager_RoadPathfinding instance;
+        public static Manager_RoadPathfinding instance { get; private set; }
 
         private void Awake()
         {
-
+            if(instance == null)
+            {
+                instance = this;
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+            Initialized();
         }
         void Start()
         {
-            Initialized();
+            
             //currentPath = SetPathFromWorldPosition(testStartPos, testEndPos);
         }
         private void Update()

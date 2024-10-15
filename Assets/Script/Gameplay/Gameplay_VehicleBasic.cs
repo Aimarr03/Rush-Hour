@@ -95,7 +95,7 @@ namespace Gameplay_RoadLogic
             if (currentState == VehicleState.TrafficLightStop || currentState == VehicleState.Stop && currentTrafficLightToStop != null)
             {
                 Vector3 boxCenter = vehicle_Collider.bounds.center;
-                Vector3 rayEnd = boxCenter + (Vector3)directionDetection * 0.1f;
+                Vector3 rayEnd = boxCenter + (Vector3)directionDetection * 0.35f;
                 Gizmos.color = Color.yellow;
                 Gizmos.DrawLine(transform.position, rayEnd);
             }
