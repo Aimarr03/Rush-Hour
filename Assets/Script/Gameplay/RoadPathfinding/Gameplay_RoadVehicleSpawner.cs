@@ -15,16 +15,17 @@ namespace Gameplay_RoadLogic
         {
             public float minSpawnDuration;
             public float maxSpawnDuration;
-
+            public float IntervalToSpawn;
             public float GetSpawnDuration => Random.Range(minSpawnDuration, maxSpawnDuration);
             public int minSpawnVehicle;
             public int maxSpawnVehicle;
-            public VehicleSpawnerData(float minSpawnDuration, float maxSpawnDuration, int minSpawnVehicle, int maxSpawnVehicle)
+            public VehicleSpawnerData(float minSpawnDuration, float maxSpawnDuration, int minSpawnVehicle, int maxSpawnVehicle, float IntervalToSpawn)
             {
                 this.minSpawnDuration = minSpawnDuration;
                 this.maxSpawnDuration = maxSpawnDuration;
                 this.minSpawnVehicle = minSpawnVehicle; 
                 this.maxSpawnVehicle = maxSpawnVehicle;
+                this.IntervalToSpawn = IntervalToSpawn;
             }
         }
         public float currentSpawnDuration = 0f;
@@ -59,7 +60,7 @@ namespace Gameplay_RoadLogic
                 vehicleBasic.transform.position = transform.position;
                 vehicleBasic.SetUpDestination(destinations, Random.Range(Manager_VehicleProducer.Instance.level_data.minSpeed, Manager_VehicleProducer.Instance.level_data.maxSpeed));
                 currentQuantity++;
-                yield return new WaitForSeconds(0.35f);
+                yield return new WaitForSeconds(0.85f);
             }
 
         }

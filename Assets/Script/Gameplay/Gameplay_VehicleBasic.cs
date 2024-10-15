@@ -223,20 +223,30 @@ namespace Gameplay_RoadLogic
             Vector2 boxCenter = vehicle_Collider.bounds.center;
             //Debug.Log(direction);
             RaycastHit2D[] hitVehicleDatas = Physics2D.LinecastAll(boxCenter, boxCenter + directionDetection * 0.35f, vehicleMask);
+            bool crash = false;
             foreach (RaycastHit2D RayCastHitVehicle in hitVehicleDatas)
             {
                 Gameplay_VehicleBasic vehicle = RayCastHitVehicle.collider.gameObject.GetComponent<Gameplay_VehicleBasic>();
-                if (vehicle.gameObject != gameObject)
+                if (vehicle.gameObject != gameObject && vehicle.currentState != VehicleState.Reach)
                 {
+                    if(vehicle.currentState != currentState)
+                    {
+                        crash = true;
+                        break;
+                    }
                     if (vehicle.currentMovingState != currentMovingState && vehicle.currentState == VehicleState.Move && currentState == VehicleState.Move && vehicle != frontVehicle)
                     {
-                        Manager_Gameplay.instance.SetGameplayState(Manager_Game.GameplayState.Lose);
-                        Debug.Log($"Lose {gameObject.name} {transform.position}");
-                        OnCrash?.Invoke(transform.position);
-                        vehicle_Animator.SetTrigger("Crash");
+                        crash = true;
                         break;
                     }
                 }
+            }
+            if (crash)
+            {
+                Manager_Gameplay.instance.SetGameplayState(Manager_Game.GameplayState.Lose);
+                Debug.Log($"Lose {gameObject.name} {transform.position}");
+                OnCrash?.Invoke(transform.position);
+                vehicle_Animator.SetTrigger("Crash");
             }
         }
         private void HandleMovementLogic()

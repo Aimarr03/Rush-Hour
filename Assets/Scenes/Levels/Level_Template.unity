@@ -267,13 +267,29 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7889513670635570639, guid: 12a9aa5bd5d94dd48a1f68bc0aa45219, type: 3}
+      propertyPath: m_Points.m_Paths.Array.data[0].Array.data[3].x
+      value: 3.849945
+      objectReference: {fileID: 0}
+    - target: {fileID: 7889513670635570639, guid: 12a9aa5bd5d94dd48a1f68bc0aa45219, type: 3}
+      propertyPath: m_Points.m_Paths.Array.data[0].Array.data[3].y
+      value: -2.4016566
+      objectReference: {fileID: 0}
+    - target: {fileID: 7889513670635570639, guid: 12a9aa5bd5d94dd48a1f68bc0aa45219, type: 3}
+      propertyPath: m_Points.m_Paths.Array.data[0].Array.data[4].x
+      value: 4.296402
+      objectReference: {fileID: 0}
+    - target: {fileID: 7889513670635570639, guid: 12a9aa5bd5d94dd48a1f68bc0aa45219, type: 3}
+      propertyPath: m_Points.m_Paths.Array.data[0].Array.data[4].y
+      value: -2.0864925
+      objectReference: {fileID: 0}
     - target: {fileID: 8562651339720968180, guid: 12a9aa5bd5d94dd48a1f68bc0aa45219, type: 3}
       propertyPath: m_Name
       value: TrafficLight For Left Road
       objectReference: {fileID: 0}
     - target: {fileID: 8562651339720968180, guid: 12a9aa5bd5d94dd48a1f68bc0aa45219, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1430,11 +1446,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8514931750859570851, guid: 37db51bc40100a6499e925fb82aec508, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.099999994
+      value: -0.09999999
       objectReference: {fileID: 0}
     - target: {fileID: 8514931750859570851, guid: 37db51bc40100a6499e925fb82aec508, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.3188629
+      value: 1.318863
       objectReference: {fileID: 0}
     - target: {fileID: 8514931750859570851, guid: 37db51bc40100a6499e925fb82aec508, type: 3}
       propertyPath: m_LocalPosition.z
